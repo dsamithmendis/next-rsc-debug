@@ -1,6 +1,6 @@
 {
   "name": "@next-rsc-debug/core",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Framework-independent event protocol and collector for Next RSC Debug",
   "author": "Samith Mendis",
   "license": "MIT",
