@@ -53,9 +53,51 @@ export async function register() {
 NEXT_RSC_DEBUG=1
 ```
 
-### 3. Visit the dashboard
+Debugging stays off unless this variable is exactly `1`, so it is safe to leave
+the `instrumentation.ts` in place across environments.
 
-Open `http://localhost:3000/__next-rsc-debug` in your browser.
+### 3. Add the events endpoint
+
+Create `app/api/debug-events/route.ts` and re-export the built-in handler:
+
+```ts
+// app/api/debug-events/route.ts
+export { GET } from "next-rsc-debug/route";
+```
+
+The handler returns a JSON snapshot for normal requests, and switches to an SSE
+stream when the request sends `Accept: text/event-stream`.
+
+### 4. Mount the dashboard
+
+```tsx
+// app/rsc-debug/page.tsx
+import { DevTools } from "@next-rsc-debug/devtools";
+
+export default function DebugPage() {
+  return <DevTools url="/api/debug-events" />;
+}
+```
+
+`@next-rsc-debug/devtools` is a **Client Component** library, so you can import
+it directly into a Server Component page. Do not wrap it in `next/dynamic`
+with `ssr: false` — that is not permitted inside a Server Component on
+Next.js 16.
+
+### 5. Visit the dashboard
+
+Open `http://localhost:3000/rsc-debug`.
+
+> **Note on the route name:** App Router folders prefixed with `_` (such as
+> `__next-rsc-debug`) are *private* and are not routable, so a dashboard placed
+> there returns 404. Use a path without a leading underscore. To keep the
+> `__next-rsc-debug` URL for compatibility, add a rewrite in `next.config.ts`:
+>
+> ```ts
+> async rewrites() {
+>   return [{ source: "/__next-rsc-debug", destination: "/rsc-debug" }];
+> }
+> ```
 
 ## Architecture
 
@@ -66,7 +108,7 @@ Next.js app
 Instrumentation (instrumentation.ts)
   │
   ▼
-Event Collector (ring buffer)
+Event Collector (ring buffer, shared via globalThis)
   │
   ├─► Ring Buffer (in-memory)
   │
@@ -83,11 +125,91 @@ DevTools UI
   └─► Event Details
 ```
 
+### Why the collector is stored on `globalThis`
+
+Next.js bundles every route into its own server chunk, so a module-level
+singleton is instantiated once **per route**. Events recorded while rendering a
+Server Component would land in a different collector instance from the one the
+`/api/debug-events` route reads, leaving the dashboard permanently empty. The
+collector is therefore keyed off a `Symbol.for(...)` on `globalThis` so that all
+route chunks share a single ring buffer within the process.
+
 ## Packages
 
-- `@next-rsc-debug/core` — Framework-independent event protocol and collector
-- `next-rsc-debug` — Next.js integration (server, route, fetch instrumentation)
-- `@next-rsc-debug/devtools` — React-based DevTools UI
+| Package | Description |
+| --- | --- |
+| `@next-rsc-debug/core` | Framework-independent event protocol and collector |
+| `next-rsc-debug` | Next.js integration (server, route, fetch instrumentation) |
+| `@next-rsc-debug/devtools` | React-based DevTools UI (Client Component) |
+
+## Development
+
+This is a pnpm + Turborepo monorepo.
+
+```bash
+pnpm install     # install workspace dependencies
+pnpm dev         # run all dev servers
+pnpm build       # build all packages, apps, and examples
+pnpm typecheck   # tsc --noEmit across the workspace
+pnpm test        # all unit tests (packages + root integration tests)
+pnpm check       # typecheck && test
+```
+
+Run a single package with the usual filter syntax:
+
+```bash
+pnpm --filter @next-rsc-debug/core test
+pnpm --filter playground dev
+```
+
+### Testing notes
+
+`pnpm test` runs two layers:
+
+- **Package unit tests** — Vitest per package (`packages/*/src/**/*.test.ts`)
+- **Root integration tests** — Vitest against `tests/unit/**`, exercising the
+  public `@next-rsc-debug/core` API surface
+
+The root Vitest config aliases `@next-rsc-debug/core` to the package source, so
+root tests run against `src` rather than a stale `dist`.
+
+End-to-end tests live in `tests/e2e` and require Playwright browsers plus a
+running playground:
+
+```bash
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
+### Repository layout
+
+```
+packages/core        # event protocol, ring buffer, analyzer, collector
+packages/next        # Next.js integration + fetch instrumentation
+packages/devtools    # React DevTools UI
+apps/playground      # demo scenarios (basic, slow, parallel, cache, duplicate, error)
+apps/docs            # documentation site
+examples/*           # standalone minimal apps, one per scenario
+tests/unit           # root integration tests
+tests/e2e            # Playwright tests
+```
+
+Each example is a self-contained Next.js app demonstrating a single scenario:
+
+| Example | Demonstrates |
+| --- | --- |
+| `examples/basic` | A single server-side fetch |
+| `examples/data-fetching` | Sequential fetches with cache events |
+| `examples/parallel-fetch` | Concurrent fetches on the timeline |
+| `examples/slow-request` | An 800ms fetch that trips the slow warning |
+| `examples/cache` | Explicit cache hit, miss, and invalidate |
+
+Run one with:
+
+```bash
+cd examples/basic
+NEXT_RSC_DEBUG=1 pnpm dev
+```
 
 ## Privacy
 
@@ -100,7 +222,12 @@ Next RSC Debug does NOT record:
 - Passwords or tokens
 - Database records
 
-Query strings are stripped by default.
+Query strings are stripped by default. For example, a fetch to
+`/api/slow?delay=800` is recorded as `http://host/api/slow` — the query string
+never reaches the event buffer.
+
+All state is held in memory in the running process. Nothing is persisted to disk
+or transmitted off the machine.
 
 ## Limitations (v0.1)
 

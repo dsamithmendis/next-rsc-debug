@@ -6,9 +6,12 @@ export default function Home() {
       <h1 className="text-3xl font-bold mb-2">Next RSC Debug Playground</h1>
       <p className="text-gray-400 mb-8">
         A demonstration app for Next RSC Debug. Open{" "}
-        <code className="bg-gray-800 px-2 py-1 rounded">
-          /__next-rsc-debug
-        </code>{" "}
+        <Link
+          href="/rsc-debug"
+          className="bg-gray-800 px-2 py-1 rounded text-blue-400 hover:text-blue-300"
+        >
+          /rsc-debug
+        </Link>{" "}
         to inspect activity.
       </p>
 
@@ -50,7 +53,15 @@ export default function Home() {
         <ol className="list-decimal list-inside space-y-1 text-sm text-gray-300">
           <li>Start the dev server: <code className="bg-gray-800 px-1 rounded">pnpm dev</code></li>
           <li>Visit any scenario page</li>
-          <li>Open <code className="bg-gray-800 px-1 rounded">/__next-rsc-debug</code></li>
+          <li>
+            Open{" "}
+            <Link
+              href="/rsc-debug"
+              className="bg-gray-800 px-1 rounded text-blue-400 hover:text-blue-300"
+            >
+              /rsc-debug
+            </Link>
+          </li>
           <li>Watch events stream live via SSE</li>
         </ol>
       </div>

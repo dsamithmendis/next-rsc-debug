@@ -30,9 +30,31 @@ export async function register() {
 NEXT_RSC_DEBUG=1
 ```
 
-### 3. Visit the dashboard
+### 3. Add the events endpoint
 
-Open `http://localhost:3000/__next-rsc-debug`.
+```ts
+// app/api/debug-events/route.ts
+export { GET } from "next-rsc-debug/route";
+```
+
+### 4. Mount the dashboard
+
+```tsx
+// app/rsc-debug/page.tsx
+import { DevTools } from "@next-rsc-debug/devtools";
+
+export default function DebugPage() {
+  return <DevTools url="/api/debug-events" />;
+}
+```
+
+### 5. Visit the dashboard
+
+Open `http://localhost:3000/rsc-debug`.
+
+> Do not name the page folder `__next-rsc-debug`. Underscore-prefixed folders
+> are private in the App Router and are not routable, so the page returns 404.
+> Add a rewrite in `next.config.ts` if you need to keep that URL.
 
 ## What is Observed
 
