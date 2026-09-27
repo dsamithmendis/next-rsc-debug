@@ -6,6 +6,21 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Published `next-rsc-debug@0.1.2` could not be installed: the `workspace:*`
+  dependency on `@next-rsc-debug/core` shipped verbatim in the tarball, so
+  `npm install next-rsc-debug` failed with `EUNSUPPORTEDPROTOCOL`. Added
+  `publishConfig` to `next-rsc-debug` and `@next-rsc-debug/devtools`. Note that
+  `npm publish` does **not** rewrite `workspace:*` — use `pnpm publish`
+- Relative imports in `packages/*/src` are emitted without `.js` extensions,
+  which Node's ESM resolver rejects (`ERR_MODULE_NOT_FOUND`). Source now carries
+  explicit `.js` specifiers
+- `packages/devtools/src/styles.css` was never copied to `dist/`, so consumers
+  received an unstyled dashboard. It is now copied at build time and exported as
+  `@next-rsc-debug/devtools/styles.css`
+- Apps and examples resolved the packages through tsconfig `paths` pointing at
+  `src/`, so the built artifacts were never exercised. They now consume `dist/`
+  through normal workspace resolution, matching what consumers get. The examples
+  were also missing their `dependencies` on the three packages
 - `pnpm-workspace.yaml` shipped an unfilled `allowBuilds` placeholder
   (`esbuild: set this to true or false`), which made every `pnpm` command fail
   with `ERR_PNPM_IGNORED_BUILDS`
@@ -31,6 +46,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- `publishConfig` (public access + registry) for the publishable packages
+- `packages/devtools/scripts/copy-css.mjs` to copy static assets into `dist/`
+- `./styles.css` export on `@next-rsc-debug/devtools`
 - Unit tests for `@next-rsc-debug/devtools` (components and the `useSse` hook)
 - Root Vitest config aliases `@next-rsc-debug/core` to package source
 - `@playwright/test` and `vitest` as root devDependencies
@@ -40,8 +58,9 @@ All notable changes to this project will be documented in this file.
 
 - Dashboard path documented as `/rsc-debug` across the root README, package
   READMEs, and the docs site
-- README documents the monorepo development workflow, testing layers, and
-  repository layout
+- README documents the monorepo development workflow, testing layers,
+  repository layout, and publishing constraints
+- Documented the required DevTools CSS import
 
 ## [0.1.0] - 2026-09-27
 

@@ -7,8 +7,8 @@
  * - error: error events
  */
 
-import type { DebugEvent, DebugEventType } from "./events";
-import { sanitizeUrl } from "./sanitize";
+import type { DebugEvent, DebugEventType } from "./events.js";
+import { sanitizeUrl } from "./sanitize.js";
 
 export type WarningSeverity = "info" | "warning";
 

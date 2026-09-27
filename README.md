@@ -73,6 +73,7 @@ stream when the request sends `Accept: text/event-stream`.
 ```tsx
 // app/rsc-debug/page.tsx
 import { DevTools } from "@next-rsc-debug/devtools";
+import "@next-rsc-debug/devtools/styles.css";
 
 export default function DebugPage() {
   return <DevTools url="/api/debug-events" />;
@@ -209,6 +210,35 @@ Run one with:
 ```bash
 cd examples/basic
 NEXT_RSC_DEBUG=1 pnpm dev
+```
+
+### Publishing
+
+The apps and examples consume the **built `dist/`** output rather than `src/`
+via tsconfig `paths`. This means the workspace exercises the same artifacts
+consumers get, so packaging problems surface locally instead of after publish.
+
+> **Always publish with `pnpm publish`, not `npm publish`.** The packages
+> depend on each other via `workspace:*`. `pnpm pack` / `pnpm publish` rewrite
+> that to a concrete version (for example `0.1.2`); `npm pack` / `npm publish`
+> leaves it as `workspace:*` in the tarball, which makes the published package
+> fail to install with `EUNSUPPORTEDPROTOCOL`.
+
+Local verification against the real tarballs:
+
+```bash
+pnpm --filter "@next-rsc-debug/core" --filter "next-rsc-debug" --filter "@next-rsc-debug/devtools" build
+pnpm -r pack --pack-destination /tmp/nrpacks
+# then install those .tgz files into a scratch Next.js app
+```
+
+Relative imports inside `packages/*/src` carry explicit `.js` extensions so the
+emitted ESM is valid for Node's resolver. The DevTools stylesheet is copied to
+`dist/` at build time and exposed as `@next-rsc-debug/devtools/styles.css`;
+import it once in your app so the dashboard is styled:
+
+```tsx
+import "@next-rsc-debug/devtools/styles.css";
 ```
 
 ## Privacy

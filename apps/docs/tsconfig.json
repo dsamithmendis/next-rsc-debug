@@ -20,12 +20,6 @@
         "name": "next"
       }
     ],
-    "paths": {
-      "next-rsc-debug": ["../../packages/next/src/index.ts"],
-      "next-rsc-debug/*": ["../../packages/next/src/*"],
-      "@next-rsc-debug/devtools": ["../../packages/devtools/src/index.ts"],
-      "@next-rsc-debug/core": ["../../packages/core/src/index.ts"]
-    },
     "allowJs": true
   },
   "include": [

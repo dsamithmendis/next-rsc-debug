@@ -28,6 +28,7 @@ an App Router Server Component page. Do **not** wrap it in `next/dynamic` with
 ```tsx
 // app/rsc-debug/page.tsx
 import { DevTools } from "@next-rsc-debug/devtools";
+import "@next-rsc-debug/devtools/styles.css";
 
 export default function DebugPage() {
   return <DevTools url="/api/debug-events" />;

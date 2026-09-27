@@ -10,16 +10,20 @@ export {
   type DebugEvent,
   type DebugEventType,
   type CreateEventOptions,
-} from "./events";
+} from "./events.js";
 
-export { sanitizeUrl, stripSensitiveQueryParams, isSafeKey } from "./sanitize";
+export {
+  sanitizeUrl,
+  stripSensitiveQueryParams,
+  isSafeKey,
+} from "./sanitize.js";
 
 export {
   RingBuffer,
   type EventListener,
   type Unsubscribe,
   type RingBufferOptions,
-} from "./ring-buffer";
+} from "./ring-buffer.js";
 
 export {
   analyzeEvents,
@@ -34,7 +38,7 @@ export {
   isCacheEventType,
   isActionEventType,
   isErrorEventType,
-} from "./analyzer";
+} from "./analyzer.js";
 
 export {
   getCollector,
@@ -42,4 +46,4 @@ export {
   setCollector,
   resetCollector,
   type Collector,
-} from "./collector";
+} from "./collector.js";

@@ -7,29 +7,29 @@ export {
   unregister,
   isDebuggingEnabled,
   type RegisterOptions,
-} from "./instrumentation";
+} from "./instrumentation.js";
 
 export {
   wrapFetch,
   unwrapFetch,
   isFetchInstrumented,
-} from "./fetch-instrument";
+} from "./fetch-instrument.js";
 
-export { handleDebugEvents, isDebugRequest } from "./route-handler";
+export { handleDebugEvents, isDebugRequest } from "./route-handler.js";
 
-export { addSseClient, closeAllSseClients, getSseClientCount } from "./sse";
+export { addSseClient, closeAllSseClients, getSseClientCount } from "./sse.js";
 
 export {
   startNavigation,
   endNavigation,
   getCurrentNavigationId,
-} from "./navigation";
+} from "./navigation.js";
 
 export {
   startRscRequest,
   endRscRequest,
   getActiveRscRequestId,
-} from "./rsc-tracking";
+} from "./rsc-tracking.js";
 
 export {
   debugComponent,
@@ -38,11 +38,11 @@ export {
   debugCacheInvalidate,
   getDebugApi,
   resetDebugApi,
-} from "./debug-api";
+} from "./debug-api.js";
 
 export {
   getAdapter,
   detectNextVersion,
   type NextAdapter,
   type NextVersion,
-} from "./adapter";
+} from "./adapter.js";

@@ -33,6 +33,11 @@
   "dependencies": {
     "@next-rsc-debug/core": "workspace:*"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "executable": false
+  },
   "peerDependencies": {
     "next": "^16.0.0",
     "react": "^19.0.0",

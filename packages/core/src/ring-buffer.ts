@@ -10,7 +10,7 @@
  * - No memory leaks.
  */
 
-import type { DebugEvent } from "./events";
+import type { DebugEvent } from "./events.js";
 
 export type EventListener = (event: DebugEvent) => void;
 export type Unsubscribe = () => void;

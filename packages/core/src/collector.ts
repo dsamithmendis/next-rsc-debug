@@ -15,8 +15,8 @@ import {
   RingBuffer,
   type EventListener,
   type Unsubscribe,
-} from "./ring-buffer";
-import type { DebugEvent } from "./events";
+} from "./ring-buffer.js";
+import type { DebugEvent } from "./events.js";
 
 export interface Collector {
   push(event: DebugEvent): void;

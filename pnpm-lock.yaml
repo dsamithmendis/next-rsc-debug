@@ -95,9 +95,18 @@ importers:
 
   examples/basic:
     dependencies:
+      "@next-rsc-debug/core":
+        specifier: workspace:*
+        version: link:../../packages/core
+      "@next-rsc-debug/devtools":
+        specifier: workspace:*
+        version: link:../../packages/devtools
       next:
         specifier: ^16.0.0
         version: 16.3.6(@playwright/test@1.63.0)(@types/node@22.20.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      next-rsc-debug:
+        specifier: workspace:*
+        version: link:../../packages/next
       react:
         specifier: ^19.0.0
         version: 19.3.0
@@ -107,9 +116,18 @@ importers:
 
   examples/cache:
     dependencies:
+      "@next-rsc-debug/core":
+        specifier: workspace:*
+        version: link:../../packages/core
+      "@next-rsc-debug/devtools":
+        specifier: workspace:*
+        version: link:../../packages/devtools
       next:
         specifier: ^16.0.0
         version: 16.3.6(@playwright/test@1.63.0)(@types/node@22.20.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      next-rsc-debug:
+        specifier: workspace:*
+        version: link:../../packages/next
       react:
         specifier: ^19.0.0
         version: 19.3.0
@@ -119,9 +137,18 @@ importers:
 
   examples/data-fetching:
     dependencies:
+      "@next-rsc-debug/core":
+        specifier: workspace:*
+        version: link:../../packages/core
+      "@next-rsc-debug/devtools":
+        specifier: workspace:*
+        version: link:../../packages/devtools
       next:
         specifier: ^16.0.0
         version: 16.3.6(@playwright/test@1.63.0)(@types/node@22.20.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      next-rsc-debug:
+        specifier: workspace:*
+        version: link:../../packages/next
       react:
         specifier: ^19.0.0
         version: 19.3.0
@@ -131,9 +158,18 @@ importers:
 
   examples/parallel-fetch:
     dependencies:
+      "@next-rsc-debug/core":
+        specifier: workspace:*
+        version: link:../../packages/core
+      "@next-rsc-debug/devtools":
+        specifier: workspace:*
+        version: link:../../packages/devtools
       next:
         specifier: ^16.0.0
         version: 16.3.6(@playwright/test@1.63.0)(@types/node@22.20.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      next-rsc-debug:
+        specifier: workspace:*
+        version: link:../../packages/next
       react:
         specifier: ^19.0.0
         version: 19.3.0
@@ -143,9 +179,18 @@ importers:
 
   examples/slow-request:
     dependencies:
+      "@next-rsc-debug/core":
+        specifier: workspace:*
+        version: link:../../packages/core
+      "@next-rsc-debug/devtools":
+        specifier: workspace:*
+        version: link:../../packages/devtools
       next:
         specifier: ^16.0.0
         version: 16.3.6(@playwright/test@1.63.0)(@types/node@22.20.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      next-rsc-debug:
+        specifier: workspace:*
+        version: link:../../packages/next
       react:
         specifier: ^19.0.0
         version: 19.3.0

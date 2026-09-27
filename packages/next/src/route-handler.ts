@@ -8,7 +8,7 @@
 
 import { Readable } from "node:stream";
 import { getCollector } from "@next-rsc-debug/core";
-import { addSseClient, isSseRequest } from "./sse";
+import { addSseClient, isSseRequest } from "./sse.js";
 
 export function isDebugRequest(url: string): boolean {
   return url.includes("/__next-rsc-debug/events");

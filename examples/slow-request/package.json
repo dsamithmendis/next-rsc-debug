@@ -12,5 +12,10 @@
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@next-rsc-debug/core": "workspace:*",
+    "@next-rsc-debug/devtools": "workspace:*",
+    "next-rsc-debug": "workspace:*"
   }
 }

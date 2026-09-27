@@ -5,12 +5,12 @@
  */
 
 import { useState, useMemo } from "react";
-import { useSse } from "../hooks/useSse";
-import { Summary } from "./Summary";
-import { Timeline } from "./Timeline";
-import { FetchInspector } from "./FetchInspector";
-import { Warnings } from "./Warnings";
-import { FilterControls, filterEvents, type FilterType } from "./Filters";
+import { useSse } from "../hooks/useSse.js";
+import { Summary } from "./Summary.js";
+import { Timeline } from "./Timeline.js";
+import { FetchInspector } from "./FetchInspector.js";
+import { Warnings } from "./Warnings.js";
+import { FilterControls, filterEvents, type FilterType } from "./Filters.js";
 import type { DebugEvent } from "@next-rsc-debug/core";
 
 export interface DevToolsProps {

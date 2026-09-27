@@ -29,24 +29,24 @@ export {
   unregister,
   isDebuggingEnabled,
   type RegisterOptions,
-} from "./server";
+} from "./server.js";
 export {
   wrapFetch,
   unwrapFetch,
   isFetchInstrumented,
-} from "./fetch-instrument";
-export { handleDebugEvents, isDebugRequest } from "./route-handler";
-export { addSseClient, closeAllSseClients, getSseClientCount } from "./sse";
+} from "./fetch-instrument.js";
+export { handleDebugEvents, isDebugRequest } from "./route-handler.js";
+export { addSseClient, closeAllSseClients, getSseClientCount } from "./sse.js";
 export {
   startNavigation,
   endNavigation,
   getCurrentNavigationId,
-} from "./navigation";
+} from "./navigation.js";
 export {
   startRscRequest,
   endRscRequest,
   getActiveRscRequestId,
-} from "./rsc-tracking";
+} from "./rsc-tracking.js";
 export {
   debugComponent,
   debugCacheHit,
@@ -54,10 +54,10 @@ export {
   debugCacheInvalidate,
   getDebugApi,
   resetDebugApi,
-} from "./debug-api";
+} from "./debug-api.js";
 export {
   getAdapter,
   detectNextVersion,
   type NextAdapter,
   type NextVersion,
-} from "./adapter";
+} from "./adapter.js";
