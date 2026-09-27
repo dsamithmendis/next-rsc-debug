@@ -16,6 +16,12 @@ updates:
         patterns:
           - typescript
           - "@types/*"
+        # typescript-eslint@8 hard-fails on TypeScript 7 (peer range is
+        # >=4.8.4 <6.1.0), which breaks `pnpm lint` entirely. Do not let this
+        # group upgrade typescript until typescript-eslint ships TS 7 support.
+        # https://github.com/typescript-eslint/typescript-eslint/issues/10940
+        exclude-patterns:
+          - "typescript"
 
   - package-ecosystem: github-actions
     directory: /

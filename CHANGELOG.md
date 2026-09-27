@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- `pnpm lint` crashed on startup after Dependabot bumped TypeScript to 7.0.2.
+  `typescript-eslint@8.70.1` declares a peer range of `typescript >=4.8.4 <6.1.0`
+  and hard-fails on TS 7, so every `eslint` invocation exited 2 before linting a
+  single file. TypeScript is pinned to `^6.0.3`, the newest release inside that
+  supported range
 - The GitHub Actions workflow could never have succeeded: it detected the
   package manager as npm (no `yarn.lock` in the repo), ran `next build` at the
   repository root where no Next.js app exists, and uploaded an `./out` directory
