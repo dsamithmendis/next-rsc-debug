@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noEmit": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
+    "jsx": "react-jsx",
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "tsBuildInfoFile": "tsconfig.tsbuildinfo",
+    "outDir": "dist",
+    "rootDir": "src",
+    "typeRoots": [
+      "../../node_modules/@types",
+      "../../node_modules/.pnpm/@types+react@19.3.0/node_modules/@types",
+      "../../node_modules/.pnpm/@types+react-dom@19.3.0/node_modules/@types",
+      "../../node_modules/.pnpm/@types+node@22.20.4/node_modules/@types"
+    ],
+    "paths": {
+      "@next-rsc-debug/core": ["../../packages/core/dist/index.d.ts"],
+      "@next-rsc-debug/core/*": ["../../packages/core/dist/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+}

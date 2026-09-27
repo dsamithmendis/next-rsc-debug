@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
+    "jsx": "react-jsx",
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "tsBuildInfoFile": "tsconfig.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "@next-rsc-debug/core": ["./packages/core/src/index.ts"],
+      "@next-rsc-debug/core/*": ["./packages/core/src/*"],
+      "@next-rsc-debug/devtools": ["./packages/devtools/src/index.ts"],
+      "@next-rsc-debug/devtools/*": ["./packages/devtools/src/*"],
+      "next-rsc-debug": ["./packages/next/src/index.ts"],
+      "next-rsc-debug/*": ["./packages/next/src/*"]
+    }
+  },
+  "include": ["packages/*/src", "apps/*/src", "apps/*/app", "tests"]
+}

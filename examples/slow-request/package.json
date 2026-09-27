@@ -1,0 +1,16 @@
+{
+  "name": "example-slow-request",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Slow request example for Next RSC Debug",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
