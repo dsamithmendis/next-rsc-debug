@@ -37,10 +37,14 @@ function collectExportTargets(value, acc = []) {
 
 for (const { name, dir } of PACKAGES) {
   const pkgDir = join(repoRoot, dir);
-  const manifest = JSON.parse(readFileSync(join(pkgDir, "package.json"), "utf8"));
+  const manifest = JSON.parse(
+    readFileSync(join(pkgDir, "package.json"), "utf8"),
+  );
 
   if (manifest.name !== name) {
-    failures.push(`${dir}: expected package "${name}", found "${manifest.name}"`);
+    failures.push(
+      `${dir}: expected package "${name}", found "${manifest.name}"`,
+    );
     continue;
   }
 
@@ -79,16 +83,18 @@ for (const { name, dir } of PACKAGES) {
   // Every declared entry point must also survive into the tarball itself.
   // npm reports tarball-relative paths (no `package/` prefix, no `./`), while
   // `exports`/`main`/`types` are written as `./dist/...`, so normalise both.
-  const packed = new Set(
-    tarball.files.map((f) => f.path.replace(/^\.\//, "")),
-  );
+  const packed = new Set(tarball.files.map((f) => f.path.replace(/^\.\//, "")));
   for (const target of declared) {
     const normalized = target.replace(/^\.\//, "");
     if (!existsSync(join(pkgDir, normalized))) {
-      failures.push(`${name}: declared entry point "${target}" is missing from dist/`);
+      failures.push(
+        `${name}: declared entry point "${target}" is missing from dist/`,
+      );
     }
     if (!packed.has(normalized)) {
-      failures.push(`${name}: "${target}" is not included in the published tarball`);
+      failures.push(
+        `${name}: "${target}" is not included in the published tarball`,
+      );
     }
   }
 

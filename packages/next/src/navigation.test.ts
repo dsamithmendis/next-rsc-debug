@@ -1,8 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import {
-  getCollector,
-  resetCollector,
-} from "@next-rsc-debug/core";
+import { getCollector, resetCollector } from "@next-rsc-debug/core";
 import {
   startNavigation,
   endNavigation,

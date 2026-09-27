@@ -1,0 +1,21 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+build
+out
+.next
+.turbo
+coverage
+playwright-report
+test-results
+
+# Generated / tool-owned files. Prettier would rewrite the lockfile's quoting
+# style (thousands of lines) and pnpm would rewrite it straight back, so these
+# are left exactly as the tools emit them.
+pnpm-lock.yaml
+pnpm-workspace.yaml
+
+# Local tooling state
+.kilo

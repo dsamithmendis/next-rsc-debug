@@ -159,8 +159,9 @@ pnpm dev         # run all dev servers
 pnpm build       # build all packages, apps, and examples
 pnpm typecheck   # tsc --noEmit across the workspace
 pnpm lint        # ESLint across the workspace
+pnpm format      # Prettier --write
 pnpm test        # all unit tests (packages + root integration tests)
-pnpm check       # typecheck && lint && test
+pnpm check       # typecheck && lint && format:check && test
 ```
 
 Run a single package with the usual filter syntax:
@@ -175,10 +176,10 @@ Linting is a single root-level `eslint .` run governed by
 
 ### Continuous integration
 
-| Workflow                                    | Trigger                | What it does                                              |
-| ------------------------------------------- | ---------------------- | --------------------------------------------------------- |
-| `.github/workflows/ci.yml`                  | push and PR to `main`  | Lint, typecheck, unit tests, build, packaging check, E2E  |
-| `.github/workflows/deploy-docs.yml`         | push to `main`         | Builds and publishes `apps/docs` to GitHub Pages           |
+| Workflow                            | Trigger               | What it does                                             |
+| ----------------------------------- | --------------------- | -------------------------------------------------------- |
+| `.github/workflows/ci.yml`          | push and PR to `main` | Lint, typecheck, unit tests, build, packaging check, E2E |
+| `.github/workflows/deploy-docs.yml` | push to `main`        | Builds and publishes `apps/docs` to GitHub Pages         |
 
 The packaging check (`.github/scripts/verify-pack.mjs`) asserts that every
 `exports` entry point each publishable package advertises exists in `dist/`
