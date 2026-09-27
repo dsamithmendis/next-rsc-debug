@@ -1,6 +1,6 @@
 {
   "name": "@next-rsc-debug/devtools",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "React-based DevTools UI for Next RSC Debug",
   "author": "Samith Mendis",
   "license": "MIT",
