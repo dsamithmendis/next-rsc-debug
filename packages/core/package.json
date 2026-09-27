@@ -22,7 +22,7 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": ">=5.0.0 <6.1.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.2",
