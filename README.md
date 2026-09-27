@@ -218,11 +218,9 @@ The apps and examples consume the **built `dist/`** output rather than `src/`
 via tsconfig `paths`. This means the workspace exercises the same artifacts
 consumers get, so packaging problems surface locally instead of after publish.
 
-> **Always publish with `pnpm publish`, not `npm publish`.** The packages
-> depend on each other via `workspace:*`. `pnpm pack` / `pnpm publish` rewrite
-> that to a concrete version (for example `0.1.2`); `npm pack` / `npm publish`
-> leaves it as `workspace:*` in the tarball, which makes the published package
-> fail to install with `EUNSUPPORTEDPROTOCOL`.
+> **Always publish with `npm publish --access public`, not `pnpm publish`.** The
+> packages depend on each other via a concrete version (for example `0.1.6`), so
+> `npm pack` / `npm publish` leaves the correct dependency string in the tarball.
 
 Local verification against the real tarballs:
 

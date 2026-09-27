@@ -1,6 +1,6 @@
 {
   "name": "next-rsc-debug",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Observability and debugging toolkit for Next.js App Router applications",
   "author": "Samith Mendis",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "lint": "eslint src --ext .ts"
   },
 "dependencies": {
-    "@next-rsc-debug/core": "0.1.4"
+    "@next-rsc-debug/core": "0.1.6"
   },
   "publishConfig": {
     "access": "public",

@@ -1,6 +1,6 @@
 {
   "name": "@next-rsc-debug/devtools",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "React-based DevTools UI for Next RSC Debug",
   "author": "Samith Mendis",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "lint": "eslint src --ext .tsx,.ts"
   },
   "dependencies": {
-    "@next-rsc-debug/core": "0.1.4"
+    "@next-rsc-debug/core": "0.1.6"
   },
   "publishConfig": {
     "access": "public",
