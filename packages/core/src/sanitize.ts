@@ -50,10 +50,7 @@ export function sanitizeUrl(url: string): string {
   }
 
   // Also strip credentials embedded in the URL (user:pass@host).
-  sanitized = sanitized.replace(
-    /^(https?:\/\/)[^:/@\s]+:[^@/\s]+@/,
-    "$1"
-  );
+  sanitized = sanitized.replace(/^(https?:\/\/)[^:/@\s]+:[^@/\s]+@/, "$1");
   // Remove userinfo entirely if present (user@host without password).
   sanitized = sanitized.replace(/^(https?:\/\/)[^@/\s]+@/, "$1");
 

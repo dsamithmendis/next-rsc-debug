@@ -23,7 +23,10 @@ pnpm add @next-rsc-debug/core
 ```ts
 import { createEvent, getCollector, analyzeEvents } from "@next-rsc-debug/core";
 
-const event = createEvent({ type: "fetch:start", metadata: { url: "/api/foo" } });
+const event = createEvent({
+  type: "fetch:start",
+  metadata: { url: "/api/foo" },
+});
 getCollector().push(event);
 
 const events = getCollector().list();

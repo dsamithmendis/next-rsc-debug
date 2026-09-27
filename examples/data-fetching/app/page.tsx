@@ -7,8 +7,8 @@ export default function Home() {
       <p>
         This example performs a single server-side fetch. Run it with{" "}
         <code>NEXT_RSC_DEBUG=1 pnpm dev</code> and open{" "}
-        <Link href="/__next-rsc-debug">the DevTools dashboard</Link> to watch the
-        request appear in the timeline.
+        <Link href="/__next-rsc-debug">the DevTools dashboard</Link> to watch
+        the request appear in the timeline.
       </p>
     </main>
   );

@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
+
 - `pnpm-workspace.yaml` shipped an unfilled `allowBuilds` placeholder
   (`esbuild: set this to true or false`), which made every `pnpm` command fail
   with `ERR_PNPM_IGNORED_BUILDS`
@@ -29,12 +30,14 @@ All notable changes to this project will be documented in this file.
   so custom DOM matchers were not registered
 
 ### Added
+
 - Unit tests for `@next-rsc-debug/devtools` (components and the `useSse` hook)
 - Root Vitest config aliases `@next-rsc-debug/core` to package source
 - `@playwright/test` and `vitest` as root devDependencies
 - `jsdom` devDependency for DevTools component tests
 
 ### Changed
+
 - Dashboard path documented as `/rsc-debug` across the root README, package
   READMEs, and the docs site
 - README documents the monorepo development workflow, testing layers, and
@@ -43,6 +46,7 @@ All notable changes to this project will be documented in this file.
 ## [0.1.0] - 2026-09-27
 
 ### Added
+
 - Core event protocol (DebugEvent, DebugEventType)
 - In-memory ring buffer (default 5000 events)
 - Event subscription support

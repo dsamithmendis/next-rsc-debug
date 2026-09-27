@@ -7,7 +7,11 @@
  * per-component render timing.
  */
 
-import { createEvent, createRequestId, getCollector } from "@next-rsc-debug/core";
+import {
+  createEvent,
+  createRequestId,
+  getCollector,
+} from "@next-rsc-debug/core";
 
 export interface RscRequestOptions {
   route?: string;
@@ -32,14 +36,14 @@ export function startRscRequest(options: RscRequestOptions = {}): string {
         observed: true,
         confidence: "observed",
       },
-    })
+    }),
   );
   return requestId;
 }
 
 export function endRscRequest(
   requestId?: string,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ): void {
   const id = requestId ?? activeRscRequestId;
   if (!id) {
@@ -51,7 +55,7 @@ export function endRscRequest(
       type: "rsc:end",
       requestId: id,
       metadata: { ...metadata, observed: true, confidence: "observed" },
-    })
+    }),
   );
   if (activeRscRequestId === id) {
     activeRscRequestId = null;

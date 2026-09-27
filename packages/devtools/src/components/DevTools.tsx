@@ -29,12 +29,12 @@ export function DevTools({
 
   const filtered = useMemo(
     () => filterEvents(events, filter, threshold),
-    [events, filter, threshold]
+    [events, filter, threshold],
   );
 
   const selectedEvent = useMemo(
     () => filtered.find((e) => e.id === selectedId) ?? null,
-    [filtered, selectedId]
+    [filtered, selectedId],
   );
 
   return (

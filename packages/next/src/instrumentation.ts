@@ -11,7 +11,11 @@
  *   }
  */
 
-import { wrapFetch, unwrapFetch, isFetchInstrumented } from "./fetch-instrument";
+import {
+  wrapFetch,
+  unwrapFetch,
+  isFetchInstrumented,
+} from "./fetch-instrument";
 import { getAdapter } from "./adapter";
 
 export interface RegisterOptions {

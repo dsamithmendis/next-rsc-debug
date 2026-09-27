@@ -17,7 +17,9 @@ export function isDebugRequest(url: string): boolean {
 export function handleDebugEvents(req: any, res: any): void {
   if (req.method !== "GET") {
     res.writeHead(405, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Method not allowed", method: req.method }));
+    res.end(
+      JSON.stringify({ error: "Method not allowed", method: req.method }),
+    );
     return;
   }
 

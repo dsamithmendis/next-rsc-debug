@@ -65,7 +65,9 @@ describe("analyzeEvents", () => {
       }),
     ];
     const { warnings } = analyzeEvents(events);
-    expect(warnings.filter((w) => w.type === "duplicate-request")).toHaveLength(0);
+    expect(warnings.filter((w) => w.type === "duplicate-request")).toHaveLength(
+      0,
+    );
   });
 
   it("detects error events", () => {
@@ -79,7 +81,11 @@ describe("analyzeEvents", () => {
 
   it("returns empty warnings for clean events", () => {
     const events = [
-      createEvent({ type: "fetch:end", duration: 100, metadata: { url: "/api/foo" } }),
+      createEvent({
+        type: "fetch:end",
+        duration: 100,
+        metadata: { url: "/api/foo" },
+      }),
     ];
     const { warnings } = analyzeEvents(events);
     expect(warnings).toHaveLength(0);

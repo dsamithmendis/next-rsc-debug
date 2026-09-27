@@ -7,20 +7,20 @@ import {
 
 describe("sanitizeUrl", () => {
   it("strips query strings", () => {
-    expect(sanitizeUrl("https://api.example.com/users?id=123&token=secret")).toBe(
-      "https://api.example.com/users"
-    );
+    expect(
+      sanitizeUrl("https://api.example.com/users?id=123&token=secret"),
+    ).toBe("https://api.example.com/users");
   });
 
   it("strips hash fragments", () => {
     expect(sanitizeUrl("https://api.example.com/users#section")).toBe(
-      "https://api.example.com/users"
+      "https://api.example.com/users",
     );
   });
 
   it("strips credentials embedded in URL", () => {
     expect(sanitizeUrl("https://user:password@api.example.com/data")).toBe(
-      "https://api.example.com/data"
+      "https://api.example.com/data",
     );
   });
 
@@ -41,7 +41,7 @@ describe("sanitizeUrl", () => {
 describe("stripSensitiveQueryParams", () => {
   it("removes sensitive params", () => {
     const result = stripSensitiveQueryParams(
-      "https://api.example.com/users?id=123&token=secret&name=bob"
+      "https://api.example.com/users?id=123&token=secret&name=bob",
     );
     expect(result).toContain("id=123");
     expect(result).toContain("name=bob");
@@ -50,7 +50,7 @@ describe("stripSensitiveQueryParams", () => {
 
   it("returns URL without hash", () => {
     const result = stripSensitiveQueryParams(
-      "https://api.example.com/users#section"
+      "https://api.example.com/users#section",
     );
     expect(result).not.toContain("#section");
   });

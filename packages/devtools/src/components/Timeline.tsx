@@ -65,7 +65,7 @@ function getEventLabel(event: DebugEvent): string {
 export function Timeline({ events, selectedId, onSelect }: TimelineProps) {
   const sorted = useMemo(
     () => [...events].sort((a, b) => a.timestamp - b.timestamp),
-    [events]
+    [events],
   );
 
   if (sorted.length === 0) {
@@ -88,7 +88,9 @@ export function Timeline({ events, selectedId, onSelect }: TimelineProps) {
             className={`nrpd-timeline-item ${isSelected ? "selected" : ""}`}
             onClick={() => onSelect?.(event)}
           >
-            <span className="nrpd-timeline-icon">{getEventIcon(event.type)}</span>
+            <span className="nrpd-timeline-icon">
+              {getEventIcon(event.type)}
+            </span>
             <span className="nrpd-timeline-label">
               {getEventLabel(event)}
               {duration}

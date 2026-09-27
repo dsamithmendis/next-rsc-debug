@@ -11,7 +11,11 @@
  * a single shared collector.
  */
 
-import { RingBuffer, type EventListener, type Unsubscribe } from "./ring-buffer";
+import {
+  RingBuffer,
+  type EventListener,
+  type Unsubscribe,
+} from "./ring-buffer";
 import type { DebugEvent } from "./events";
 
 export interface Collector {

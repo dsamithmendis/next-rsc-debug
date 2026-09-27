@@ -89,7 +89,7 @@ Next.js 16.
 Open `http://localhost:3000/rsc-debug`.
 
 > **Note on the route name:** App Router folders prefixed with `_` (such as
-> `__next-rsc-debug`) are *private* and are not routable, so a dashboard placed
+> `__next-rsc-debug`) are _private_ and are not routable, so a dashboard placed
 > there returns 404. Use a path without a leading underscore. To keep the
 > `__next-rsc-debug` URL for compatibility, add a rewrite in `next.config.ts`:
 >
@@ -136,11 +136,11 @@ route chunks share a single ring buffer within the process.
 
 ## Packages
 
-| Package | Description |
-| --- | --- |
-| `@next-rsc-debug/core` | Framework-independent event protocol and collector |
-| `next-rsc-debug` | Next.js integration (server, route, fetch instrumentation) |
-| `@next-rsc-debug/devtools` | React-based DevTools UI (Client Component) |
+| Package                    | Description                                                |
+| -------------------------- | ---------------------------------------------------------- |
+| `@next-rsc-debug/core`     | Framework-independent event protocol and collector         |
+| `next-rsc-debug`           | Next.js integration (server, route, fetch instrumentation) |
+| `@next-rsc-debug/devtools` | React-based DevTools UI (Client Component)                 |
 
 ## Development
 
@@ -196,13 +196,13 @@ tests/e2e            # Playwright tests
 
 Each example is a self-contained Next.js app demonstrating a single scenario:
 
-| Example | Demonstrates |
-| --- | --- |
-| `examples/basic` | A single server-side fetch |
-| `examples/data-fetching` | Sequential fetches with cache events |
-| `examples/parallel-fetch` | Concurrent fetches on the timeline |
-| `examples/slow-request` | An 800ms fetch that trips the slow warning |
-| `examples/cache` | Explicit cache hit, miss, and invalidate |
+| Example                   | Demonstrates                               |
+| ------------------------- | ------------------------------------------ |
+| `examples/basic`          | A single server-side fetch                 |
+| `examples/data-fetching`  | Sequential fetches with cache events       |
+| `examples/parallel-fetch` | Concurrent fetches on the timeline         |
+| `examples/slow-request`   | An 800ms fetch that trips the slow warning |
+| `examples/cache`          | Explicit cache hit, miss, and invalidate   |
 
 Run one with:
 

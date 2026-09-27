@@ -12,10 +12,7 @@ import { sanitizeUrl } from "./sanitize";
 
 export type WarningSeverity = "info" | "warning";
 
-export type WarningType =
-  | "slow-request"
-  | "duplicate-request"
-  | "error";
+export type WarningType = "slow-request" | "duplicate-request" | "error";
 
 export interface Warning {
   id: string;
@@ -34,7 +31,7 @@ const DEFAULT_SLOW_THRESHOLD = 500;
 
 export function analyzeEvents(
   events: DebugEvent[],
-  options: AnalyzeOptions = {}
+  options: AnalyzeOptions = {},
 ): { warnings: Warning[] } {
   const slowThreshold = options.slowThreshold ?? DEFAULT_SLOW_THRESHOLD;
   const warnings: Warning[] = [];
@@ -83,7 +80,9 @@ export function analyzeEvents(
         details: {
           url,
           count: group.length,
-          requestIds: group.map((e) => e.requestId).filter((id): id is string => id !== undefined),
+          requestIds: group
+            .map((e) => e.requestId)
+            .filter((id): id is string => id !== undefined),
         },
       });
     }
@@ -130,9 +129,7 @@ export function isRscEventType(type: DebugEventType): boolean {
 
 export function isCacheEventType(type: DebugEventType): boolean {
   return (
-    type === "cache:hit" ||
-    type === "cache:miss" ||
-    type === "cache:invalidate"
+    type === "cache:hit" || type === "cache:miss" || type === "cache:invalidate"
   );
 }
 

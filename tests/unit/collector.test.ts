@@ -1,5 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { getCollector, resetCollector, createEvent } from "@next-rsc-debug/core";
+import {
+  getCollector,
+  resetCollector,
+  createEvent,
+} from "@next-rsc-debug/core";
 
 describe("collector", () => {
   beforeEach(() => {

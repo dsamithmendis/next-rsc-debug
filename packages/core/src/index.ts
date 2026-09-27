@@ -12,11 +12,7 @@ export {
   type CreateEventOptions,
 } from "./events";
 
-export {
-  sanitizeUrl,
-  stripSensitiveQueryParams,
-  isSafeKey,
-} from "./sanitize";
+export { sanitizeUrl, stripSensitiveQueryParams, isSafeKey } from "./sanitize";
 
 export {
   RingBuffer,

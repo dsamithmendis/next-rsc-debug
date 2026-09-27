@@ -5,7 +5,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@next-rsc-debug/core": fileURLToPath(
-        new URL("./packages/core/src/index.ts", import.meta.url)
+        new URL("./packages/core/src/index.ts", import.meta.url),
       ),
     },
   },

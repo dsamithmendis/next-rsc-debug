@@ -19,8 +19,8 @@ export default async function DuplicatePage() {
     <main className="p-8 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Duplicate Fetch</h1>
       <p className="text-gray-400 mb-6">
-        This page issues two fetches to the same URL. The DevTools should
-        flag this as a duplicate request.
+        This page issues two fetches to the same URL. The DevTools should flag
+        this as a duplicate request.
       </p>
       <pre className="bg-gray-900 p-4 rounded-lg border border-gray-800 text-sm overflow-auto">
         {JSON.stringify(data, null, 2)}

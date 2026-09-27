@@ -15,16 +15,9 @@ export {
   isFetchInstrumented,
 } from "./fetch-instrument";
 
-export {
-  handleDebugEvents,
-  isDebugRequest,
-} from "./route-handler";
+export { handleDebugEvents, isDebugRequest } from "./route-handler";
 
-export {
-  addSseClient,
-  closeAllSseClients,
-  getSseClientCount,
-} from "./sse";
+export { addSseClient, closeAllSseClients, getSseClientCount } from "./sse";
 
 export {
   startNavigation,

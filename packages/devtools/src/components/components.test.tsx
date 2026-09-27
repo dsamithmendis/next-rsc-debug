@@ -25,7 +25,10 @@ describe("Summary", () => {
   });
 
   it("counts fetch events", () => {
-    const events = [makeEvent({ type: "fetch:start" }), makeEvent({ type: "fetch:end" })];
+    const events = [
+      makeEvent({ type: "fetch:start" }),
+      makeEvent({ type: "fetch:end" }),
+    ];
     render(<Summary events={events} threshold={500} />);
     const fetches = screen.getByText("Fetches").parentElement;
     expect(fetches?.textContent).toContain("2");
@@ -55,7 +58,9 @@ describe("Timeline", () => {
       metadata: { method: "GET", url: "https://example.com/api", status: 200 },
     });
     render(<Timeline events={[event]} />);
-    expect(screen.getByText(/fetch GET https:\/\/example.com\/api 200/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/fetch GET https:\/\/example.com\/api 200/),
+    ).toBeInTheDocument();
     expect(screen.getByText(/\(120ms\)/)).toBeInTheDocument();
   });
 
@@ -63,9 +68,10 @@ describe("Timeline", () => {
     const event = makeEvent({ type: "rsc:start" });
     let selected: DebugEvent | undefined;
     render(<Timeline events={[event]} onSelect={(e) => (selected = e)} />);
-    screen.getByText(/RSC request/).closest(".nrpd-timeline-item")?.dispatchEvent(
-      new MouseEvent("click", { bubbles: true })
-    );
+    screen
+      .getByText(/RSC request/)
+      .closest(".nrpd-timeline-item")
+      ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     expect(selected?.id).toBe(event.id);
   });
 });
@@ -93,7 +99,12 @@ describe("FetchInspector", () => {
     const event = makeEvent({
       type: "fetch:end",
       requestId: "req_1",
-      metadata: { method: "POST", url: "https://example.com/x", status: 201, duration: 42 },
+      metadata: {
+        method: "POST",
+        url: "https://example.com/x",
+        status: 201,
+        duration: 42,
+      },
     });
     render(<FetchInspector event={event} />);
     expect(screen.getByText("POST")).toBeInTheDocument();

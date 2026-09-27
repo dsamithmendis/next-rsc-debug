@@ -20,7 +20,10 @@
     "tsBuildInfoFile": "tsconfig.tsbuildinfo",
     "outDir": "dist",
     "rootDir": "src",
-    "typeRoots": ["../../node_modules/@types", "../../node_modules/.pnpm/@types+node@22.20.4/node_modules/@types"],
+    "typeRoots": [
+      "../../node_modules/@types",
+      "../../node_modules/.pnpm/@types+node@22.20.4/node_modules/@types"
+    ],
     "paths": {
       "@next-rsc-debug/core": ["../../packages/core/dist/index.d.ts"],
       "@next-rsc-debug/core/*": ["../../packages/core/dist/*"]

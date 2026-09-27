@@ -6,12 +6,24 @@ export default function DocsPage() {
       <h1>Next RSC Debug Documentation</h1>
       <nav style={{ margin: "24px 0" }}>
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          <li><Link href="/overview">Overview</Link></li>
-          <li><Link href="/install">Installation</Link></li>
-          <li><Link href="/setup">Setup</Link></li>
-          <li><Link href="/playground">Playground</Link></li>
-          <li><Link href="/privacy">Privacy</Link></li>
-          <li><Link href="/limitations">Limitations</Link></li>
+          <li>
+            <Link href="/overview">Overview</Link>
+          </li>
+          <li>
+            <Link href="/install">Installation</Link>
+          </li>
+          <li>
+            <Link href="/setup">Setup</Link>
+          </li>
+          <li>
+            <Link href="/playground">Playground</Link>
+          </li>
+          <li>
+            <Link href="/privacy">Privacy</Link>
+          </li>
+          <li>
+            <Link href="/limitations">Limitations</Link>
+          </li>
         </ul>
       </nav>
     </main>

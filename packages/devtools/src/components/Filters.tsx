@@ -38,7 +38,7 @@ export const FILTER_OPTIONS: FilterOption[] = [
 export function filterEvents(
   events: DebugEvent[],
   filter: FilterType,
-  threshold: number
+  threshold: number,
 ): DebugEvent[] {
   if (filter === "all") {
     return events;
@@ -48,8 +48,7 @@ export function filterEvents(
     switch (filter) {
       case "navigation":
         return (
-          event.type === "navigation:start" ||
-          event.type === "navigation:end"
+          event.type === "navigation:start" || event.type === "navigation:end"
         );
       case "rsc":
         return event.type === "rsc:start" || event.type === "rsc:end";
@@ -62,9 +61,7 @@ export function filterEvents(
           event.type === "cache:invalidate"
         );
       case "action":
-        return (
-          event.type === "action:start" || event.type === "action:end"
-        );
+        return event.type === "action:start" || event.type === "action:end";
       case "error":
         return event.type === "error";
       case "slow":

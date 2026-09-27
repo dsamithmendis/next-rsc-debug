@@ -78,7 +78,9 @@ describe("RingBuffer", () => {
     buffer.subscribe(() => {
       throw new Error("boom");
     });
-    expect(() => buffer.push(createEvent({ type: "fetch:start" }))).not.toThrow();
+    expect(() =>
+      buffer.push(createEvent({ type: "fetch:start" })),
+    ).not.toThrow();
   });
 
   it("listRange returns slice", () => {

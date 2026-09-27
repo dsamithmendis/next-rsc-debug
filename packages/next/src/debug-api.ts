@@ -46,7 +46,7 @@ export function resetDebugApi(): void {
 
 export function debugComponent<T>(
   name: string,
-  fn: () => Promise<T> | T
+  fn: () => Promise<T> | T,
 ): Promise<T> {
   const api = getDebugApi();
   const start = createEvent({
@@ -78,7 +78,7 @@ export function debugComponent<T>(
         });
         api.collector.push(end);
         throw error;
-      }
+      },
     );
   }
 
@@ -92,32 +92,41 @@ export function debugComponent<T>(
   return Promise.resolve(result);
 }
 
-export function debugCacheHit(key: string, metadata?: Record<string, unknown>): void {
+export function debugCacheHit(
+  key: string,
+  metadata?: Record<string, unknown>,
+): void {
   const api = getDebugApi();
   api.collector.push(
     createEvent({
       type: "cache:hit",
       metadata: { key, ...metadata, observed: true },
-    })
+    }),
   );
 }
 
-export function debugCacheMiss(key: string, metadata?: Record<string, unknown>): void {
+export function debugCacheMiss(
+  key: string,
+  metadata?: Record<string, unknown>,
+): void {
   const api = getDebugApi();
   api.collector.push(
     createEvent({
       type: "cache:miss",
       metadata: { key, ...metadata, observed: true },
-    })
+    }),
   );
 }
 
-export function debugCacheInvalidate(key: string, metadata?: Record<string, unknown>): void {
+export function debugCacheInvalidate(
+  key: string,
+  metadata?: Record<string, unknown>,
+): void {
   const api = getDebugApi();
   api.collector.push(
     createEvent({
       type: "cache:invalidate",
       metadata: { key, ...metadata, observed: true },
-    })
+    }),
   );
 }

@@ -16,12 +16,12 @@ export interface SummaryProps {
 export function Summary({ events, threshold }: SummaryProps) {
   const { warnings } = useMemo(
     () => analyzeEvents(events, { slowThreshold: threshold }),
-    [events, threshold]
+    [events, threshold],
   );
 
   const stats = useMemo(() => {
     const fetches = events.filter(
-      (e) => e.type === "fetch:start" || e.type === "fetch:end"
+      (e) => e.type === "fetch:start" || e.type === "fetch:end",
     ).length;
     const slow = warnings.filter((w) => w.type === "slow-request").length;
     const dupes = warnings.filter((w) => w.type === "duplicate-request").length;

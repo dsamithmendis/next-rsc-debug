@@ -6,7 +6,11 @@
  * rather than from browser navigation APIs.
  */
 
-import { createEvent, createNavigationId, getCollector } from "@next-rsc-debug/core";
+import {
+  createEvent,
+  createNavigationId,
+  getCollector,
+} from "@next-rsc-debug/core";
 
 let currentNavigationId: string | null = null;
 
@@ -19,12 +23,15 @@ export function startNavigation(metadata?: Record<string, unknown>): string {
       type: "navigation:start",
       requestId: navId,
       metadata: { ...metadata, observed: true },
-    })
+    }),
   );
   return navId;
 }
 
-export function endNavigation(navId?: string, metadata?: Record<string, unknown>): void {
+export function endNavigation(
+  navId?: string,
+  metadata?: Record<string, unknown>,
+): void {
   const id = navId ?? currentNavigationId;
   if (!id) {
     return;
@@ -35,7 +42,7 @@ export function endNavigation(navId?: string, metadata?: Record<string, unknown>
       type: "navigation:end",
       requestId: id,
       metadata: { ...metadata, observed: true },
-    })
+    }),
   );
   if (currentNavigationId === id) {
     currentNavigationId = null;

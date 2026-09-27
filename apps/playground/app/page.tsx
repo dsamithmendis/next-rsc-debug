@@ -51,7 +51,10 @@ export default function Home() {
       <div className="mt-8 p-4 bg-gray-900 rounded-lg border border-gray-800">
         <h2 className="font-semibold mb-2">How to use</h2>
         <ol className="list-decimal list-inside space-y-1 text-sm text-gray-300">
-          <li>Start the dev server: <code className="bg-gray-800 px-1 rounded">pnpm dev</code></li>
+          <li>
+            Start the dev server:{" "}
+            <code className="bg-gray-800 px-1 rounded">pnpm dev</code>
+          </li>
           <li>Visit any scenario page</li>
           <li>
             Open{" "}

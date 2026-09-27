@@ -48,7 +48,8 @@ const original = globalThis.EventSource;
 
 beforeEach(() => {
   FakeEventSource.instances = [];
-  (globalThis as unknown as { EventSource: unknown }).EventSource = FakeEventSource;
+  (globalThis as unknown as { EventSource: unknown }).EventSource =
+    FakeEventSource;
 });
 
 afterEach(() => {
@@ -89,7 +90,10 @@ describe("useSse", () => {
     const { result } = renderHook(() => useSse("/api/debug-events"));
 
     await act(async () => {
-      FakeEventSource.last().emit("event", createEvent({ type: "fetch:start" }));
+      FakeEventSource.last().emit(
+        "event",
+        createEvent({ type: "fetch:start" }),
+      );
       FakeEventSource.last().emit("event", createEvent({ type: "fetch:end" }));
     });
 
@@ -102,9 +106,11 @@ describe("useSse", () => {
     await act(async () => {
       const es = FakeEventSource.last();
       const bad = { data: "not json" } as MessageEvent;
-      for (const fn of (es as unknown as {
-        listeners: Map<string, Array<(e: MessageEvent) => void>>;
-      }).listeners.get("event") ?? []) {
+      for (const fn of (
+        es as unknown as {
+          listeners: Map<string, Array<(e: MessageEvent) => void>>;
+        }
+      ).listeners.get("event") ?? []) {
         fn(bad);
       }
     });

@@ -30,14 +30,14 @@ export function GET(request: Request): Response {
     start(controller) {
       controller.enqueue(
         new TextEncoder().encode(
-          formatSseEvent("snapshot", { events, enabled: true })
-        )
+          formatSseEvent("snapshot", { events, enabled: true }),
+        ),
       );
 
       const unsubscribe = collector.subscribe((event) => {
         try {
           controller.enqueue(
-            new TextEncoder().encode(formatSseEvent("event", event))
+            new TextEncoder().encode(formatSseEvent("event", event)),
           );
         } catch {
           unsubscribe?.();
@@ -49,8 +49,8 @@ export function GET(request: Request): Response {
         try {
           controller.enqueue(
             new TextEncoder().encode(
-              formatSseEvent("heartbeat", { timestamp: Date.now() })
-            )
+              formatSseEvent("heartbeat", { timestamp: Date.now() }),
+            ),
           );
         } catch {
           clearInterval(heartbeatTimer);

@@ -1,4 +1,9 @@
-import { debugComponent, debugCacheHit, debugCacheMiss, debugCacheInvalidate } from "next-rsc-debug/server";
+import {
+  debugComponent,
+  debugCacheHit,
+  debugCacheMiss,
+  debugCacheInvalidate,
+} from "next-rsc-debug/server";
 import { headers } from "next/headers";
 
 async function fetchData() {

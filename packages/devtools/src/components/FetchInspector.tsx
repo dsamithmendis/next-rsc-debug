@@ -27,8 +27,7 @@ export function FetchInspector({ event }: FetchInspectorProps) {
       { label: "Status", value: String(metadata.status ?? "—") },
       {
         label: "Duration",
-        value:
-          metadata.duration !== undefined ? `${metadata.duration}ms` : "—",
+        value: metadata.duration !== undefined ? `${metadata.duration}ms` : "—",
       },
       { label: "Timestamp", value: new Date(event.timestamp).toISOString() },
       { label: "Request ID", value: String(event.requestId ?? "—") },
@@ -77,9 +76,7 @@ export function FetchInspector({ event }: FetchInspectorProps) {
           <h4>Warnings</h4>
           <ul>
             {warnings.map((w, i) => (
-              <li key={i}>
-                {typeof w === "string" ? w : (w.message ?? "")}
-              </li>
+              <li key={i}>{typeof w === "string" ? w : (w.message ?? "")}</li>
             ))}
           </ul>
         </div>

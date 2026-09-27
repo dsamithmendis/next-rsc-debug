@@ -42,7 +42,7 @@ describe("debug-api", () => {
     await expect(
       debugComponent("Failing", async () => {
         throw new Error("boom");
-      })
+      }),
     ).rejects.toThrow("boom");
     const events = getCollector().list();
     expect(events.some((e) => e.type === "rsc:end")).toBe(true);

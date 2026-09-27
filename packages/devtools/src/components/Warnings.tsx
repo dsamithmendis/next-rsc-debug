@@ -16,7 +16,7 @@ export interface WarningsProps {
 export function Warnings({ events, threshold }: WarningsProps) {
   const { warnings } = useMemo(
     () => analyzeEvents(events, { slowThreshold: threshold }),
-    [events, threshold]
+    [events, threshold],
   );
 
   if (warnings.length === 0) {
