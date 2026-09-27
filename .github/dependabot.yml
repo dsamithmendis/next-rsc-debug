@@ -1,0 +1,23 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # pnpm workspace projects (apps/*, packages/*, examples/*)
+    groups:
+      next-js:
+        patterns:
+          - next
+          - react
+          - react-dom
+      typescript:
+        patterns:
+          - typescript
+          - "@types/*"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

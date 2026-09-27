@@ -6,12 +6,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "preview": "serve out",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
   }
 }

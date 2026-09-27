@@ -11,11 +11,7 @@
  *   }
  */
 
-import {
-  wrapFetch,
-  unwrapFetch,
-  isFetchInstrumented,
-} from "./fetch-instrument.js";
+import { wrapFetch, unwrapFetch } from "./fetch-instrument.js";
 import { getAdapter } from "./adapter.js";
 
 export interface RegisterOptions {

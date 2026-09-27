@@ -6,6 +6,26 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- The GitHub Actions workflow could never have succeeded: it detected the
+  package manager as npm (no `yarn.lock` in the repo), ran `next build` at the
+  repository root where no Next.js app exists, and uploaded an `./out` directory
+  that nothing generated. Replaced with a pnpm-aware CI workflow and a real
+  GitHub Pages deployment
+- `apps/docs` had no static export configuration, so the Pages build produced
+  no output. Added `output: "export"` with `basePath` and `trailingSlash` so the
+  docs site is served from `https://<user>.github.io/next-rsc-debug/`
+- `.npmrc` was missing a line break, so `linker=isolated-io` and
+  `ignore-scripts=false` were parsed as a single malformed key
+- `pnpm install` failed with `ERR_PNPM_IGNORED_BUILDS` once ESLint was added,
+  because `unrs-resolver` was not listed in `allowBuilds`
+- `pnpm lint` was broken: it ran `eslint` through Turborepo, but ESLint was
+  never installed, so every package failed with `eslint: command not found`
+- `apps/playground` ran `next lint`, which was removed in Next.js 16
+- `packages/next/src/fetch-instrument.ts` read `input.method` off a value that
+  could be a `string`, silently reporting the wrong HTTP method for
+  `fetch(new Request(url, { method: "POST" }))`
+- Unused imports and an unused loop variable were left in eight source files
+- `playwright-report/` and `test-results/` were not gitignored
 - Published `next-rsc-debug@0.1.2` could not be installed: the `workspace:*`
   dependency on `@next-rsc-debug/core` shipped verbatim in the tarball, so
   `npm install next-rsc-debug` failed with `EUNSUPPORTEDPROTOCOL`. Added
@@ -46,6 +66,18 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- CI workflow running lint, typecheck, unit tests, build, and a packaging check
+  on every push and pull request
+- GitHub Pages workflow that builds and deploys the documentation site
+- `.github/scripts/verify-pack.mjs`, which asserts every `exports` entry point
+  each publishable package advertises exists and survives `npm pack` — this
+  guards the packaging class of bug that broke `0.1.2`
+- ESLint 9 flat config (`eslint.config.mjs`) and the dependencies to run it
+- Playwright E2E job in CI
+- `CONTRIBUTING.md`, `SECURITY.md`, and a pull request template
+- Dependabot configuration for npm, workspace projects, and GitHub Actions
+- Issue template configuration routing questions to Discussions
+- `engines.node` field declaring the Node.js minimum
 - `publishConfig` (public access + registry) for the publishable packages
 - `packages/devtools/scripts/copy-css.mjs` to copy static assets into `dist/`
 - `./styles.css` export on `@next-rsc-debug/devtools`
@@ -56,6 +88,16 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Playwright uses a configurable port (defaults to 3100) instead of 3000, so the
+  suite no longer fails when a dev server already occupies 3000. The config also
+  sets `forbidOnly`, CI retries, and the GitHub reporter
+- Linting is a single root-level `eslint .` run instead of a per-package
+  Turborepo task, so one config governs the whole workspace
+- `pnpm check` now includes lint
+- Issue templates capture the versions that matter for a debugging toolkit
+  instead of a generic device/OS form
+- Documentation deployment targets `apps/docs` and derives its `basePath` from
+  the repository name (or `/` when a custom domain is configured)
 - Dashboard path documented as `/rsc-debug` across the root README, package
   READMEs, and the docs site
 - README documents the monorepo development workflow, testing layers,

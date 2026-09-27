@@ -1,8 +1,8 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
+about: Report something that does not work as documented
+title: "[Bug] "
+labels: bug
 assignees: ''
 
 ---
@@ -10,29 +10,27 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**To reproduce**
+1. Install the package: `...`
+2. Start your app: `...`
+3. Navigate to: `...`
+4. See the error
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+What you expected to happen instead.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Screenshots or logs**
+If applicable, add screenshots or the relevant console/server output.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+**Environment**
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+- Next RSC Debug version: [e.g. 0.1.6]
+- Next.js version: [e.g. 16.3.6]
+- React version: [e.g. 19.2.0]
+- Node version: [e.g. 22.20.0]
+- Package manager: [e.g. pnpm 11.10.0]
+- Operating system: [e.g. macOS 15.6]
+- Browser (if relevant): [e.g. Chrome 141]
 
 **Additional context**
-Add any other context about the problem here.
+Anything else that might help, including workarounds you have found.

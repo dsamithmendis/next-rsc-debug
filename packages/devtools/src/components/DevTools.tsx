@@ -11,7 +11,6 @@ import { Timeline } from "./Timeline.js";
 import { FetchInspector } from "./FetchInspector.js";
 import { Warnings } from "./Warnings.js";
 import { FilterControls, filterEvents, type FilterType } from "./Filters.js";
-import type { DebugEvent } from "@next-rsc-debug/core";
 
 export interface DevToolsProps {
   url?: string;

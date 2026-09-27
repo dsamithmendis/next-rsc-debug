@@ -4,7 +4,7 @@
  * SSE client hook for live event streaming.
  */
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { DebugEvent } from "@next-rsc-debug/core";
 
 export interface SseState {

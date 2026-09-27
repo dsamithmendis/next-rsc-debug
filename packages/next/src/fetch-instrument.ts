@@ -13,7 +13,6 @@ import {
   createRequestId,
   sanitizeUrl,
   getCollector,
-  type DebugEvent,
 } from "@next-rsc-debug/core";
 
 export interface FetchMetadata {
@@ -41,7 +40,10 @@ export function wrapFetch(): void {
   originalFetch = globalThis.fetch.bind(globalThis);
   isWrapped = true;
 
-  globalThis.fetch = async (input: any, init?: any) => {
+  globalThis.fetch = async (
+    input: RequestInfo | URL,
+    init?: RequestInit,
+  ): Promise<Response> => {
     const collector = getCollector();
 
     // Extract URL and method safely.
@@ -52,7 +54,7 @@ export function wrapFetch(): void {
       url = input;
     } else if (input instanceof URL) {
       url = input.toString();
-    } else if (input && typeof input.url === "string") {
+    } else if (input instanceof Request) {
       url = input.url;
     } else {
       url = String(input);
@@ -60,7 +62,7 @@ export function wrapFetch(): void {
 
     if (init && typeof init.method === "string") {
       method = init.method.toUpperCase();
-    } else if (input && typeof input.method === "string") {
+    } else if (input instanceof Request && typeof input.method === "string") {
       method = input.method.toUpperCase();
     }
 

@@ -8,7 +8,7 @@
  */
 
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getCollector, type DebugEvent } from "@next-rsc-debug/core";
+import { getCollector } from "@next-rsc-debug/core";
 
 export interface SseClient {
   id: string;
@@ -82,7 +82,7 @@ export function getSseClientCount(): number {
 }
 
 export function closeAllSseClients(): void {
-  for (const [id, client] of clients) {
+  for (const client of clients.values()) {
     try {
       client.res.end();
     } catch {

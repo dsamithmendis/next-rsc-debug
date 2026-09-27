@@ -1,5 +1,10 @@
 # Next RSC Debug
 
+[![CI](https://github.com/dsamithmendis/next-rsc-debug/actions/workflows/ci.yml/badge.svg)](https://github.com/dsamithmendis/next-rsc-debug/actions/workflows/ci.yml)
+[![Docs](https://github.com/dsamithmendis/next-rsc-debug/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/dsamithmendis/next-rsc-debug/actions/workflows/deploy-docs.yml)
+[![npm](https://img.shields.io/npm/v/next-rsc-debug)](https://www.npmjs.com/package/next-rsc-debug)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 **See what your Next.js Server Components are actually doing.**
 
 Next RSC Debug is a development-focused observability and debugging toolkit for
@@ -145,15 +150,17 @@ route chunks share a single ring buffer within the process.
 
 ## Development
 
-This is a pnpm + Turborepo monorepo.
+This is a pnpm + Turborepo monorepo. Node 20.9+ is required; the exact pnpm
+version is pinned in `package.json` via `packageManager`.
 
 ```bash
 pnpm install     # install workspace dependencies
 pnpm dev         # run all dev servers
 pnpm build       # build all packages, apps, and examples
 pnpm typecheck   # tsc --noEmit across the workspace
+pnpm lint        # ESLint across the workspace
 pnpm test        # all unit tests (packages + root integration tests)
-pnpm check       # typecheck && test
+pnpm check       # typecheck && lint && test
 ```
 
 Run a single package with the usual filter syntax:
@@ -162,6 +169,39 @@ Run a single package with the usual filter syntax:
 pnpm --filter @next-rsc-debug/core test
 pnpm --filter playground dev
 ```
+
+Linting is a single root-level `eslint .` run governed by
+`eslint.config.mjs`, so there is one config for the whole workspace.
+
+### Continuous integration
+
+| Workflow                                    | Trigger                | What it does                                              |
+| ------------------------------------------- | ---------------------- | --------------------------------------------------------- |
+| `.github/workflows/ci.yml`                  | push and PR to `main`  | Lint, typecheck, unit tests, build, packaging check, E2E  |
+| `.github/workflows/deploy-docs.yml`         | push to `main`         | Builds and publishes `apps/docs` to GitHub Pages           |
+
+The packaging check (`.github/scripts/verify-pack.mjs`) asserts that every
+`exports` entry point each publishable package advertises exists in `dist/`
+**and** survives `npm pack`, which is the class of bug that made
+`next-rsc-debug@0.1.2` uninstallable.
+
+### Documentation site
+
+`apps/docs` is a statically exported Next.js site deployed to GitHub Pages at
+<https://dsamithmendis.github.io/next-rsc-debug/>. It is served from a
+subpath, so the build injects a `basePath`:
+
+```bash
+pnpm --filter docs dev    # local dev at http://localhost:3000
+pnpm --filter docs build  # emits apps/docs/out
+```
+
+Setting a `PAGES_DOMAIN` repository variable switches the deployed site to a
+custom domain, in which case `basePath` becomes `/`.
+
+> Only the docs site can be deployed to GitHub Pages. The playground and the
+> examples expose API routes (including the SSE event stream) and therefore need
+> a server, so run them locally with `pnpm dev`.
 
 ### Testing notes
 
@@ -180,6 +220,13 @@ running playground:
 ```bash
 pnpm exec playwright install chromium
 pnpm test:e2e
+```
+
+The suite starts the playground itself on port 3100. Set `E2E_PORT` to use a
+different port if 3100 is already taken:
+
+```bash
+E2E_PORT=3200 pnpm test:e2e
 ```
 
 ### Repository layout

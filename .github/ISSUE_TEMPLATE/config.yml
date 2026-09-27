@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or feature idea
+    about: Ask a question or propose a feature.
+    url: https://github.com/dsamithmendis/next-rsc-debug/discussions
+  - name: Next.js App Router docs
+    about: For questions about Next.js itself rather than this toolkit.
+    url: https://nextjs.org/docs

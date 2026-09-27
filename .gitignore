@@ -1,6 +1,7 @@
 node_modules
 dist
 build
+out
 .next
 .turbo
 coverage
@@ -8,7 +9,11 @@ coverage
 .env
 .env.local
 *.log
+*.tgz
 .DS_Store
 playwright/.cache
+playwright-report
 playwright/test-results
+test-results
+.vercel
 .kilo

@@ -20,8 +20,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && node ./scripts/copy-css.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run --config vitest.config.ts",
-    "lint": "eslint src --ext .tsx,.ts"
+    "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
     "@next-rsc-debug/core": "0.1.6"

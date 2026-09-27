@@ -4,8 +4,7 @@
  * Filter controls for the DevTools dashboard.
  */
 
-import { useMemo } from "react";
-import type { DebugEvent, DebugEventType } from "@next-rsc-debug/core";
+import type { DebugEvent } from "@next-rsc-debug/core";
 
 export type FilterType =
   | "all"
