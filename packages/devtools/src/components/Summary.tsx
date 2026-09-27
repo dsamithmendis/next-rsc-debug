@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Summary cards for the DevTools dashboard.
  */

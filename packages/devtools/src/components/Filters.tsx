@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Filter controls for the DevTools dashboard.
  */

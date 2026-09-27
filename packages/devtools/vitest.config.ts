@@ -5,6 +5,6 @@ export default defineConfig({
     include: ["src/**/*.test.tsx", "src/**/*.test.ts"],
     environment: "jsdom",
     testTimeout: 10000,
-    setupFiles: ["@testing-library/jest-dom"],
+    setupFiles: ["@testing-library/jest-dom/vitest"],
   },
 });

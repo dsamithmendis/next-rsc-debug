@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Main DevTools dashboard.
  */

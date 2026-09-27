@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * SSE client hook for live event streaming.
  */

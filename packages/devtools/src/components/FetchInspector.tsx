@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Fetch inspector component.
  */

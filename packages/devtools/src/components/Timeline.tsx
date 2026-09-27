@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Event timeline component.
  */

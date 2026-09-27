@@ -8,7 +8,7 @@ export default function PrivacyPage() {
         <li>Authorization headers</li>
         <li>Request bodies</li>
         <li>Response bodies</li>
-        <liPasswords or tokens</li>
+        <li>Passwords or tokens</li>
         <li>Database records</li>
       </ul>
       <p>Query strings are stripped by default.</p>

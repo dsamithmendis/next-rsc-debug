@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Public API for @next-rsc-debug/devtools.
  */
