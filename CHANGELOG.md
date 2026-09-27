@@ -91,6 +91,13 @@ All notable changes to this project will be documented in this file.
 - Playwright uses a configurable port (defaults to 3100) instead of 3000, so the
   suite no longer fails when a dev server already occupies 3000. The config also
   sets `forbidOnly`, CI retries, and the GitHub reporter
+- Added `.prettierignore` so Prettier stops rewriting `pnpm-lock.yaml` and
+  `pnpm-workspace.yaml`, which are tool-owned (Prettier wanted to reformat 4480
+  lockfile lines purely to change pnpm's single quotes to double quotes)
+- Added `pnpm format:check`, wired into `pnpm check` and CI so formatting
+  cannot drift
+- Prettier fixed a pre-existing indentation bug in `packages/next/package.json`
+  (the `dependencies` block was flush with the left margin)
 - Linting is a single root-level `eslint .` run instead of a per-package
   Turborepo task, so one config governs the whole workspace
 - `pnpm check` now includes lint

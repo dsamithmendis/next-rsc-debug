@@ -3,14 +3,14 @@ name: Bug report
 about: Report something that does not work as documented
 title: "[Bug] "
 labels: bug
-assignees: ''
-
+assignees: ""
 ---
 
 **Describe the bug**
 A clear and concise description of what the bug is.
 
 **To reproduce**
+
 1. Install the package: `...`
 2. Start your app: `...`
 3. Navigate to: `...`
