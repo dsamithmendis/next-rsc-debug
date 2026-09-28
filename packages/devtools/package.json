@@ -1,6 +1,6 @@
 {
   "name": "@next-rsc-debug/devtools",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "description": "React-based DevTools UI for Next RSC Debug",
   "author": "Samith Mendis",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@next-rsc-debug/core": "0.1.7"
+    "@next-rsc-debug/core": "0.1.9"
   },
   "publishConfig": {
     "access": "public",
