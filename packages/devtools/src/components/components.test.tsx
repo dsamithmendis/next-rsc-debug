@@ -87,6 +87,18 @@ describe("Warnings", () => {
     render(<Warnings events={events} threshold={500} />);
     expect(screen.getByText(/Warnings \(/)).toBeInTheDocument();
   });
+
+  it("renders exactly one heading, in both the empty and populated states", () => {
+    const { container: empty } = render(<Warnings events={[]} />);
+    expect(empty.querySelectorAll("h2, h3")).toHaveLength(1);
+    cleanup();
+
+    const events = [makeEvent({ type: "fetch:end", duration: 1200 })];
+    const { container: populated } = render(
+      <Warnings events={events} threshold={500} />,
+    );
+    expect(populated.querySelectorAll("h2, h3")).toHaveLength(1);
+  });
 });
 
 describe("FetchInspector", () => {
@@ -111,6 +123,12 @@ describe("FetchInspector", () => {
     expect(screen.getByText("201")).toBeInTheDocument();
     expect(screen.getByText("42ms")).toBeInTheDocument();
     expect(screen.getByText("req_1")).toBeInTheDocument();
+  });
+
+  it("does not render its own heading, since the panel already labels it", () => {
+    const event = makeEvent({ type: "fetch:end" });
+    const { container } = render(<FetchInspector event={event} />);
+    expect(container.querySelectorAll("h1, h2, h3")).toHaveLength(0);
   });
 });
 

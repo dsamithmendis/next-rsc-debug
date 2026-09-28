@@ -74,7 +74,6 @@ export function DevTools({
       </div>
 
       <div className="nrpd-panel nrpd-panel-warnings">
-        <h2>Warnings</h2>
         <Warnings events={events} threshold={threshold} />
       </div>
     </div>

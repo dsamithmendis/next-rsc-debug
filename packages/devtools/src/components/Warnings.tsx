@@ -21,15 +21,18 @@ export function Warnings({ events, threshold }: WarningsProps) {
 
   if (warnings.length === 0) {
     return (
-      <div className="nrpd-empty">
-        <span>No warnings detected.</span>
+      <div className="nrpd-panel-body">
+        <h2>Warnings</h2>
+        <div className="nrpd-empty">
+          <span>No warnings detected.</span>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="nrpd-warnings">
-      <h3>Warnings ({warnings.length})</h3>
+    <div className="nrpd-panel-body">
+      <h2>Warnings ({warnings.length})</h2>
       <ul className="nrpd-warning-list">
         {warnings.map((w: Warning) => (
           <li key={w.id} className={`nrpd-warning nrpd-warning-${w.type}`}>

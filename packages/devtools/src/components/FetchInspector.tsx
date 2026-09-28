@@ -60,7 +60,6 @@ export function FetchInspector({ event }: FetchInspectorProps) {
 
   return (
     <div className="nrpd-inspector">
-      <h3>Event details</h3>
       <table className="nrpd-inspector-table">
         <tbody>
           {rows.map((row) => (

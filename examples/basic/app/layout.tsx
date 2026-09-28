@@ -1,3 +1,4 @@
+import "@next-rsc-debug/devtools/styles.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
