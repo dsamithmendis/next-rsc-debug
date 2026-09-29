@@ -1,7 +1,7 @@
-"use client";
-
 /**
  * Warnings panel.
+ *
+ * No `"use client"` directive — see the note in `Summary.tsx`.
  */
 
 import { useMemo } from "react";
@@ -11,15 +11,21 @@ import { analyzeEvents } from "@next-rsc-debug/core";
 export interface WarningsProps {
   events: DebugEvent[];
   threshold?: number;
+  /**
+   * Pre-computed warnings from `analyzeEvents`. Supply this to share one
+   * analysis across panels; when omitted the component computes its own.
+   */
+  warnings?: Warning[];
 }
 
-export function Warnings({ events, threshold }: WarningsProps) {
-  const { warnings } = useMemo(
-    () => analyzeEvents(events, { slowThreshold: threshold }),
-    [events, threshold],
+export function Warnings({ events, threshold, warnings }: WarningsProps) {
+  const resolvedWarnings = useMemo(
+    () =>
+      warnings ?? analyzeEvents(events, { slowThreshold: threshold }).warnings,
+    [warnings, events, threshold],
   );
 
-  if (warnings.length === 0) {
+  if (resolvedWarnings.length === 0) {
     return (
       <div className="nrpd-panel-body">
         <h2>Warnings</h2>
@@ -32,9 +38,9 @@ export function Warnings({ events, threshold }: WarningsProps) {
 
   return (
     <div className="nrpd-panel-body">
-      <h2>Warnings ({warnings.length})</h2>
+      <h2>Warnings ({resolvedWarnings.length})</h2>
       <ul className="nrpd-warning-list">
-        {warnings.map((w: Warning) => (
+        {resolvedWarnings.map((w: Warning) => (
           <li key={w.id} className={`nrpd-warning nrpd-warning-${w.type}`}>
             <span className="nrpd-warning-type">{w.type}</span>
             <span className="nrpd-warning-message">{w.message}</span>

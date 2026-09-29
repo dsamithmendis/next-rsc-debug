@@ -1,7 +1,10 @@
-"use client";
-
 /**
- * Filter controls for the DevTools dashboard.
+ * Filter definitions and the pure event-filtering predicate.
+ *
+ * Deliberately NOT a `"use client"` module: these are plain data and a pure
+ * function, so a Server Component can import and call them directly. Keeping
+ * them out of the client boundary is what lets `index.ts` re-export them as
+ * real values instead of client references.
  */
 
 import type { DebugEvent } from "@next-rsc-debug/core";
@@ -71,49 +74,4 @@ export function filterEvents(
         return true;
     }
   });
-}
-
-export interface FilterControlsProps {
-  activeFilter: FilterType;
-  onFilterChange: (filter: FilterType) => void;
-  threshold: number;
-  onThresholdChange: (threshold: number) => void;
-}
-
-export function FilterControls({
-  activeFilter,
-  onFilterChange,
-  threshold,
-  onThresholdChange,
-}: FilterControlsProps) {
-  return (
-    <div className="nrpd-filters">
-      <div className="nrpd-filter-group">
-        {FILTER_OPTIONS.map((opt) => (
-          <button
-            key={opt.id}
-            className={`nrpd-filter-btn ${activeFilter === opt.id ? "active" : ""}`}
-            onClick={() => onFilterChange(opt.id)}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
-      <div className="nrpd-threshold">
-        <label>
-          Slow threshold:
-          <input
-            type="number"
-            value={threshold}
-            onChange={(e) =>
-              onThresholdChange(Number.parseInt(e.target.value, 10) || 500)
-            }
-            min={0}
-            step={50}
-          />
-          <span>ms</span>
-        </label>
-      </div>
-    </div>
-  );
 }

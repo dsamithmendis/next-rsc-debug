@@ -39,6 +39,32 @@ describe("analyzeEvents", () => {
       createEvent({
         type: "fetch:end",
         requestId: "req_2",
+        metadata: { url: "https://api.example.com/users?id=1" },
+      }),
+      createEvent({
+        type: "fetch:end",
+        requestId: "req_3",
+        metadata: { url: "https://api.example.com/users?id=1" },
+      }),
+    ];
+    const { warnings } = analyzeEvents(events);
+    const dupes = warnings.filter((w) => w.type === "duplicate-request");
+    expect(dupes).toHaveLength(1);
+    expect(dupes[0].eventIds).toHaveLength(3);
+  });
+
+  it("does not report differing query params as duplicates", () => {
+    // Stripping the query string entirely used to collapse these three into one
+    // group, which is a false positive: they are different resources.
+    const events = [
+      createEvent({
+        type: "fetch:end",
+        requestId: "req_1",
+        metadata: { url: "https://api.example.com/users?id=1" },
+      }),
+      createEvent({
+        type: "fetch:end",
+        requestId: "req_2",
         metadata: { url: "https://api.example.com/users?id=2" },
       }),
       createEvent({
@@ -48,9 +74,28 @@ describe("analyzeEvents", () => {
       }),
     ];
     const { warnings } = analyzeEvents(events);
-    const dupes = warnings.filter((w) => w.type === "duplicate-request");
-    expect(dupes).toHaveLength(1);
-    expect(dupes[0].eventIds).toHaveLength(3);
+    expect(warnings.filter((w) => w.type === "duplicate-request")).toHaveLength(
+      0,
+    );
+  });
+
+  it("still detects duplicates that differ only by a sensitive param", () => {
+    const events = [
+      createEvent({
+        type: "fetch:end",
+        requestId: "req_1",
+        metadata: { url: "https://api.example.com/data?token=aaa" },
+      }),
+      createEvent({
+        type: "fetch:end",
+        requestId: "req_2",
+        metadata: { url: "https://api.example.com/data?token=bbb" },
+      }),
+    ];
+    const { warnings } = analyzeEvents(events);
+    expect(warnings.filter((w) => w.type === "duplicate-request")).toHaveLength(
+      1,
+    );
   });
 
   it("does not flag unique URLs as duplicates", () => {

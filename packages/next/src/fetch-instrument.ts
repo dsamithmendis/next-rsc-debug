@@ -66,7 +66,10 @@ export function wrapFetch(): void {
       method = input.method.toUpperCase();
     }
 
-    const sanitizedUrl = sanitizeUrl(url);
+    // Non-sensitive query parameters are kept: they are usually what makes a
+    // duplicate request interesting (`?page=1` vs `?page=2` are not the same
+    // request), and the sensitive ones are removed either way.
+    const sanitizedUrl = sanitizeUrl(url, { preserveQuery: true });
     const requestId = createRequestId();
 
     const startEvent = createEvent({

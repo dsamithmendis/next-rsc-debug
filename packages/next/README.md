@@ -5,6 +5,13 @@
 A development-focused observability and debugging toolkit for Next.js App Router
 applications.
 
+Everything runs on your server and your own routes: `instrumentation.ts` wraps
+`fetch`, events are buffered in your Node process, a route handler you mount
+serves them as JSON and SSE, and the dashboard is an ordinary React page in
+your app. **No browser extension is required or planned** — nothing is injected
+into the browser, so there is nothing to install, no permissions to grant, and
+no dependency on a particular browser.
+
 ## Installation
 
 ```bash

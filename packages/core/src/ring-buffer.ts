@@ -19,7 +19,12 @@ export interface RingBufferOptions {
   max?: number;
 }
 
-const DEFAULT_MAX = 5000;
+/**
+ * Shared by the server-side ring buffer and the client-side event list, so the
+ * two cannot drift apart and leave the UI holding more history than the server
+ * is willing to keep.
+ */
+export const DEFAULT_MAX_EVENTS = 5000;
 
 export class RingBuffer {
   private readonly max: number;
@@ -27,7 +32,7 @@ export class RingBuffer {
   private listeners: EventListener[] = [];
 
   constructor(options: RingBufferOptions = {}) {
-    this.max = options.max ?? DEFAULT_MAX;
+    this.max = options.max ?? DEFAULT_MAX_EVENTS;
     if (!Number.isFinite(this.max) || this.max <= 0) {
       throw new Error("RingBuffer max must be a positive number");
     }

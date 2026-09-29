@@ -1,7 +1,9 @@
-"use client";
-
 /**
  * Event timeline component.
+ *
+ * No `"use client"` directive: it renders from serializable props. `onSelect`
+ * is optional, so a Server Component may render it read-only; `DevTools`
+ * supplies the handler from the client.
  */
 
 import { useMemo } from "react";
@@ -19,7 +21,15 @@ export interface TimelineProps {
   events: DebugEvent[];
   selectedId?: string;
   onSelect?: (event: DebugEvent) => void;
+  /**
+   * Maximum rows rendered at once. The event array is bounded (see `useSse`),
+   * but the DOM is not: a few thousand rows is enough to make the panel
+   * unusable, so only the most recent are drawn and the rest are summarised.
+   */
+  maxItems?: number;
 }
+
+const DEFAULT_MAX_ITEMS = 200;
 
 function getEventIcon(type: DebugEvent["type"]): string {
   if (isNavigationEventType(type)) return "🧭";
@@ -62,7 +72,12 @@ function getEventLabel(event: DebugEvent): string {
   }
 }
 
-export function Timeline({ events, selectedId, onSelect }: TimelineProps) {
+export function Timeline({
+  events,
+  selectedId,
+  onSelect,
+  maxItems = DEFAULT_MAX_ITEMS,
+}: TimelineProps) {
   const sorted = useMemo(
     () => [...events].sort((a, b) => a.timestamp - b.timestamp),
     [events],
@@ -76,9 +91,20 @@ export function Timeline({ events, selectedId, onSelect }: TimelineProps) {
     );
   }
 
+  // Keep the newest rows: this is a live tail, and the most recent activity is
+  // what a developer is looking at.
+  const visible = sorted.slice(-maxItems);
+  const hiddenCount = sorted.length - visible.length;
+
   return (
     <div className="nrpd-timeline">
-      {sorted.map((event) => {
+      {hiddenCount > 0 && (
+        <div className="nrpd-timeline-truncated">
+          Showing the {visible.length} most recent of {sorted.length} events (
+          {hiddenCount} older not rendered).
+        </div>
+      )}
+      {visible.map((event) => {
         const isSelected = event.id === selectedId;
         const duration =
           event.duration !== undefined ? ` (${event.duration}ms)` : "";

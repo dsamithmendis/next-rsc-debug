@@ -14,12 +14,35 @@ Components, Server Actions, RSC payloads, errors, and client rendering.
 
 > **Core principle:** Don't merely show events. Explain what happened and why.
 
+> **No browser extension.** The dashboard is an ordinary page inside your own
+> application. Instrumentation runs on your server, events stream over a route
+> handler you mount yourself, and the UI is a plain React component — so there
+> is nothing to install, no permissions to grant, and no dependency on any one
+> browser. See [How it works](#how-it-works).
+
+## How it works
+
+Nothing is injected into the browser. The pipeline is entirely yours:
+
+1. `instrumentation.ts` calls `register()`, which wraps the server's `fetch`
+2. Producers (`debugComponent()`, `debugCacheHit()`, …) write events into an
+   in-memory ring buffer on `globalThis` in the Node process
+3. A route handler you mount serves that buffer as JSON and as a live SSE stream
+4. `<DevTools />` — a normal React client component — subscribes and renders
+
+Because the source is a plain endpoint, you can also just `curl
+/api/debug-events`, assert on it in CI, or run the whole thing in a container
+with no browser installed.
+
 ## Features
 
+- DevTools dashboard rendered as an in-page React component — no browser
+  extension, no permissions, works in any browser
 - Core event protocol with unique IDs, timestamps, and metadata
 - In-memory ring buffer (default 5000 events) with FIFO eviction
 - Event subscription support for live updates
-- URL sanitization (query strings and credentials stripped by default)
+- URL sanitization (credentials always removed; non-sensitive query parameters
+  kept for display and duplicate detection)
 - Next.js instrumentation integration via `instrumentation.ts`
 - Server-side fetch instrumentation (no bodies, cookies, or auth headers recorded)
 - Request ID correlation
@@ -298,9 +321,23 @@ Next RSC Debug does NOT record:
 - Passwords or tokens
 - Database records
 
-Query strings are stripped by default. For example, a fetch to
-`/api/slow?delay=800` is recorded as `http://host/api/slow` — the query string
-never reaches the event buffer.
+These guarantees are enforced in `createEvent`, at the single point every event
+is constructed, rather than at each call site. Metadata keys matching a
+sensitive list (`token`, `password`, `authorization`, `cookie`, `csrf`,
+`private_key`, …) are stripped at every nesting level, and values that cannot be
+safely serialized are normalized — `Date` to ISO, `BigInt` to string, cycles to a
+`"[Circular]"` marker. A new producer cannot bypass this by accident.
+
+Query strings keep their non-sensitive parameters, so a fetch to
+`/api/slow?delay=800` is recorded as `http://host/api/slow?delay=800`; `?token=…`
+and any other sensitive parameter is removed, as are embedded `user:password@`
+credentials. Call `sanitizeUrl(url)` without `{ preserveQuery: true }` to get the
+older, fully-stripped behaviour.
+
+Email addresses in cache keys passed to `debugCacheHit` / `debugCacheMiss` /
+`debugCacheInvalidate` are redacted to their first character and domain
+(`alice@example.com` → `a***@example.com`), which keeps events about the same
+user correlatable without retaining the address.
 
 All state is held in memory in the running process. Nothing is persisted to disk
 or transmitted off the machine.
@@ -312,13 +349,17 @@ or transmitted off the machine.
 - Native Next.js cache internals are NOT tracked
 - Complete Server Action tracing is NOT available
 - Production observability is NOT supported
-- No Chrome extension
 - No cloud dashboard
 - No AI explanations
 
+A browser extension is deliberately **not** on this list: none is needed, and
+none is planned. The dashboard is an in-page React component — see
+[How it works](#how-it-works). An extension is on the roadmap only as an
+optional convenience for docking the UI in the DevTools panel.
+
 ## Roadmap (v0.2)
 
-- Chrome DevTools extension
+- Optional Chrome DevTools panel for the existing in-page dashboard
 - VS Code extension
 - Persistent traces
 - Trace comparison

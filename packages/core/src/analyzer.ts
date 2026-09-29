@@ -55,11 +55,15 @@ export function analyzeEvents(
     }
   }
 
-  // Duplicate detection: group fetch events by normalized URL.
+  // Duplicate detection: group fetch events by normalized URL. Non-sensitive
+  // query parameters are preserved so `/api/items?page=1` and
+  // `/api/items?page=2` are not reported as duplicates of each other.
   const fetchGroups = new Map<string, DebugEvent[]>();
   for (const event of events) {
     if (event.type === "fetch:end" && event.metadata?.url) {
-      const url = sanitizeUrl(String(event.metadata.url));
+      const url = sanitizeUrl(String(event.metadata.url), {
+        preserveQuery: true,
+      });
       const group = fetchGroups.get(url);
       if (group) {
         group.push(event);
@@ -112,7 +116,7 @@ export function normalizeFetchUrl(event: DebugEvent): string | undefined {
   if (event.type !== "fetch:end" || !event.metadata?.url) {
     return undefined;
   }
-  return sanitizeUrl(String(event.metadata.url));
+  return sanitizeUrl(String(event.metadata.url), { preserveQuery: true });
 }
 
 export function isFetchEventType(type: DebugEventType): boolean {

@@ -20,8 +20,32 @@ const HEARTBEAT_INTERVAL_MS = 15_000;
 let nextClientId = 1;
 const clients = new Map<string, SseClient>();
 
-function formatSseEvent(event: string, data: unknown): string {
-  return `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+/**
+ * Builds one SSE frame.
+ *
+ * Total by construction: it never throws. Callers therefore cannot confuse a
+ * serialization failure with a dead connection, which previously caused a
+ * single bad payload to silently unsubscribe a healthy client.
+ */
+export function formatSseEvent(event: string, data: unknown): string {
+  let payload: string | undefined;
+  try {
+    payload = JSON.stringify(data);
+  } catch (err) {
+    // Should be unreachable now that `createEvent` sanitizes metadata, but a
+    // hand-rolled collector or a future producer could still hand us a cycle.
+    payload = JSON.stringify({
+      serializationError:
+        err instanceof Error ? err.message : "Failed to serialize event",
+    });
+  }
+  if (payload === undefined) {
+    // JSON.stringify(undefined) returns undefined, not a string.
+    payload = "null";
+  }
+  // JSON.stringify escapes newlines inside strings, so a payload can never
+  // inject a premature frame terminator.
+  return `event: ${event}\ndata: ${payload}\n\n`;
 }
 
 export function addSseClient(res: ServerResponse): string {
@@ -39,14 +63,26 @@ export function addSseClient(res: ServerResponse): string {
   // Send initial snapshot.
   const collector = getCollector();
   const events = collector.list();
-  res.write(formatSseEvent("snapshot", { events, enabled: true }));
+  try {
+    res.write(formatSseEvent("snapshot", { events, enabled: true }));
+  } catch {
+    // Headers are already flushed, so the client is committed. Close cleanly
+    // instead of letting the exception escape and 500 the route.
+    clients.delete(id);
+    try {
+      res.end();
+    } catch {
+      // Ignore.
+    }
+    return id;
+  }
 
   // Subscribe to new events.
   const unsubscribe = collector.subscribe((event) => {
     try {
       res.write(formatSseEvent("event", event));
     } catch {
-      // Client disconnected; clean up.
+      // `formatSseEvent` is total, so a throw here really is a dead socket.
       unsubscribe();
       removeSseClient(id);
     }

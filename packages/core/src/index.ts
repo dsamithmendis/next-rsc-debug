@@ -16,10 +16,15 @@ export {
   sanitizeUrl,
   stripSensitiveQueryParams,
   isSafeKey,
+  sanitizeKey,
+  sanitizeMetadata,
+  type SanitizeUrlOptions,
+  type SanitizeMetadataOptions,
 } from "./sanitize.js";
 
 export {
   RingBuffer,
+  DEFAULT_MAX_EVENTS,
   type EventListener,
   type Unsubscribe,
   type RingBufferOptions,

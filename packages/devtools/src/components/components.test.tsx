@@ -6,7 +6,7 @@ import { Summary } from "./Summary";
 import { Timeline } from "./Timeline";
 import { Warnings } from "./Warnings";
 import { FetchInspector } from "./FetchInspector";
-import { filterEvents, FILTER_OPTIONS } from "./Filters";
+import { filterEvents, FILTER_OPTIONS } from "../lib/filterOptions";
 
 function makeEvent(overrides: Partial<DebugEvent> = {}): DebugEvent {
   return { ...createEvent({ type: "fetch:start" }), ...overrides };
@@ -43,6 +43,15 @@ describe("Summary", () => {
     const slow = screen.getByText("Slow").parentElement;
     expect(slow?.textContent).toContain("1");
   });
+
+  it("uses supplied warnings instead of recomputing them", () => {
+    const events = [makeEvent({ type: "fetch:end", duration: 900 })];
+    // A deliberately empty warnings array: if the component recomputed, the
+    // 900ms event would show as slow. It must trust the prop.
+    render(<Summary events={events} threshold={500} warnings={[]} />);
+    const slow = screen.getByText("Slow").parentElement;
+    expect(slow?.textContent).toContain("0");
+  });
 });
 
 describe("Timeline", () => {
@@ -74,6 +83,22 @@ describe("Timeline", () => {
       ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     expect(selected?.id).toBe(event.id);
   });
+
+  it("renders only the newest rows and says how many were omitted", () => {
+    const events = Array.from({ length: 50 }, (_, i) =>
+      makeEvent({ type: "rsc:start", timestamp: i }),
+    );
+    const { container } = render(<Timeline events={events} maxItems={10} />);
+
+    expect(container.querySelectorAll(".nrpd-timeline-item")).toHaveLength(10);
+    expect(screen.getByText(/10 most recent of 50 events/)).toBeInTheDocument();
+  });
+
+  it("omits the notice when nothing was truncated", () => {
+    const events = [makeEvent({ type: "rsc:start" })];
+    const { container } = render(<Timeline events={events} maxItems={10} />);
+    expect(container.querySelector(".nrpd-timeline-truncated")).toBeNull();
+  });
 });
 
 describe("Warnings", () => {
@@ -86,6 +111,14 @@ describe("Warnings", () => {
     const events = [makeEvent({ type: "fetch:end", duration: 1200 })];
     render(<Warnings events={events} threshold={500} />);
     expect(screen.getByText(/Warnings \(/)).toBeInTheDocument();
+  });
+
+  it("uses supplied warnings instead of recomputing them", () => {
+    const events = [makeEvent({ type: "fetch:end", duration: 1200 })];
+    // The event would produce a slow-request warning, but an explicitly empty
+    // prop must win, proving the component does not fall back to analysis.
+    render(<Warnings events={events} threshold={500} warnings={[]} />);
+    expect(screen.getByText("No warnings detected.")).toBeInTheDocument();
   });
 
   it("renders exactly one heading, in both the empty and populated states", () => {

@@ -1,10 +1,11 @@
 {
   "name": "@next-rsc-debug/core",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Framework-independent event protocol and collector for Next RSC Debug",
   "author": "Samith Mendis",
   "license": "MIT",
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -19,7 +20,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run --config vitest.config.ts"
+    "test": "vitest run --config vitest.config.ts",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0 <6.1.0"

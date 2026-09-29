@@ -11,6 +11,29 @@ describe("duplicate detection", () => {
       }),
       createEvent({
         type: "fetch:end",
+        metadata: { url: "https://api.example.com/users?id=1" },
+      }),
+      createEvent({
+        type: "fetch:end",
+        metadata: { url: "https://api.example.com/users?id=1" },
+      }),
+    ];
+    const { warnings } = analyzeEvents(events);
+    const dupes = warnings.filter((w) => w.type === "duplicate-request");
+    expect(dupes).toHaveLength(1);
+    expect(dupes[0].eventIds).toHaveLength(3);
+  });
+
+  it("does not flag requests that differ only by a non-sensitive param", () => {
+    // Query parameters are preserved for duplicate detection, so these are
+    // three distinct resources rather than three copies of one request.
+    const events = [
+      createEvent({
+        type: "fetch:end",
+        metadata: { url: "https://api.example.com/users?id=1" },
+      }),
+      createEvent({
+        type: "fetch:end",
         metadata: { url: "https://api.example.com/users?id=2" },
       }),
       createEvent({
@@ -19,9 +42,9 @@ describe("duplicate detection", () => {
       }),
     ];
     const { warnings } = analyzeEvents(events);
-    const dupes = warnings.filter((w) => w.type === "duplicate-request");
-    expect(dupes).toHaveLength(1);
-    expect(dupes[0].eventIds).toHaveLength(3);
+    expect(warnings.filter((w) => w.type === "duplicate-request")).toHaveLength(
+      0,
+    );
   });
 });
 

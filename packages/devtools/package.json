@@ -1,10 +1,13 @@
 {
   "name": "@next-rsc-debug/devtools",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "React-based DevTools UI for Next RSC Debug",
   "author": "Samith Mendis",
   "license": "MIT",
   "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -20,10 +23,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && node ./scripts/copy-css.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run --config vitest.config.ts"
+    "test": "vitest run --config vitest.config.ts",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@next-rsc-debug/core": "0.1.9"
+    "@next-rsc-debug/core": "workspace:*"
   },
   "publishConfig": {
     "access": "public",

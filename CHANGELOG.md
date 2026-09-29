@@ -116,6 +116,94 @@ All notable changes to this project will be documented in this file.
   repository layout, and publishing constraints
 - Documented the required DevTools CSS import
 
+## [0.2.0] - 2026-09-29
+
+### Added
+
+- Documented that no browser extension is required or planned. The README, both
+  package READMEs, and the docs Overview now describe the full pipeline
+  (`instrumentation.ts` → `globalThis` event buffer → your own route handler →
+  an in-page React component), and call out that nothing is injected into the
+  browser
+- `PanelBoundary`, exported from `@next-rsc-debug/devtools`, composing a class
+  error boundary with a Suspense boundary. Every panel in the dashboard is
+  wrapped in one, so a malformed event renders an inline error instead of
+  white-screening the UI, and a suspended panel shows a skeleton. Takes a
+  `resetKey` because error boundaries do not reset on their own
+- `sanitizeMetadata()` in `@next-rsc-debug/core`, applied centrally in
+  `createEvent()`. Strips sensitive keys at every nesting level and normalizes
+  values that are unsafe to broadcast: `Date`→ISO, `Map`/`Set`→plain,
+  `BigInt`→string, `Error`→`{name,message}`, cycles→`"[Circular]"`. Bounded by
+  depth, array length and string length
+- `sanitizeKey()`, used by `debugCacheHit`/`debugCacheMiss`/`debugCacheInvalidate`.
+  Redacts the local part of any email address in a cache key, keeping the domain
+  so events about the same user can still be correlated
+- `sanitizeUrl(url, { preserveQuery: true })`, which keeps non-sensitive query
+  parameters instead of dropping the whole query string. Sensitive parameters and
+  embedded credentials are still removed
+- `useSse(url, { maxEvents })` bounds the events retained in the browser.
+  Defaults to the same `DEFAULT_MAX_EVENTS` the server ring buffer uses, now
+  exported from core, so the two cannot drift apart
+- `Timeline` accepts `maxItems` (default 200) and renders only the most recent
+  rows, with a notice stating how many were not rendered
+- `"clean"` scripts for `core`, `devtools` and `next`
+
+### Fixed
+
+- **Sensitive metadata was persisted and broadcast to every connected browser.**
+  `isSafeKey` existed but was never called, so `debugCacheHit("s", { token })`
+  stored a live credential in the `globalThis` collector and streamed it over an
+  SSE endpoint served with `Access-Control-Allow-Origin: *`
+- **One unserializable event could 500 the SSE endpoint.** The initial snapshot
+  called `JSON.stringify` with no `try`/`catch`; a circular reference or `BigInt`
+  in metadata made `addSseClient` throw and the dashboard could never connect
+- **A serialization failure silently ended the stream.** The per-event `catch`
+  assumed any error was a dead socket and unsubscribed the client, so a single bad
+  payload left a healthy connection quietly frozen. `formatSseEvent` is now total
+  by construction, which makes that `catch` truthful
+- **Query strings were over-sanitized, causing false duplicate warnings.**
+  `/api/items?page=1` and `/api/items?page=2` both normalized to `/api/items` and
+  were reported as duplicates of each other
+- **Cross-package changes were invisible until release.** `next` and `devtools`
+  resolved `@next-rsc-debug/core` from the npm registry rather than the workspace,
+  so a local edit to `core` failed with confusing "not a function" or "has no
+  exported member" errors. Dependencies now use the `workspace:` protocol
+- **Deleting `dist/` produced a silently partial build.** All three packages set
+  `incremental: true` but none had a `clean` script, so `tsc` skipped
+  re-emitting unchanged files and Turborepo then replayed the broken output from
+  cache. `clean` now removes `dist` and `tsconfig.tsbuildinfo` together
+
+### Changed
+
+- **`@next-rsc-debug/devtools` no longer marks its barrel `"use client"`.**
+  Previously every non-component export reached a Server Component as a _client
+  reference_, so `FILTER_OPTIONS.map(...)` would have thrown. The boundary is now
+  per module: `DevTools`, `FilterControls`, `useSse` and `PanelBoundary` are
+  client; `Summary`, `Timeline`, `Warnings` and `FetchInspector` are
+  server-renderable. The import path is unchanged
+- `Summary` and `Warnings` accept an optional `warnings` prop. `DevTools` now runs
+  `analyzeEvents` once and shares the result, instead of each panel recomputing the
+  same O(n) pass
+- `useSse` coalesces bursts of SSE messages into one state commit per frame
+  instead of one per message, which was quadratic in the number of events
+- `FetchInspector` is memoized; it renders from a single event and was
+  re-rendering on every streamed event
+- `"sideEffects": false` on `@next-rsc-debug/core` (and a CSS-scoped variant on
+  `devtools`) lets bundlers drop `collector` and `RingBuffer` from the client
+  bundle. Verified absent from the built client chunks
+
+### Breaking
+
+- The `devtools` barrel no longer carries `"use client"`. Consumers that relied
+  on `FILTER_OPTIONS` or `filterEvents` arriving as client references will now
+  receive real values, which is the fix, but code written against the old
+  behaviour will behave differently
+- `packages/next` and `packages/devtools` now depend on `workspace:*` for
+  `@next-rsc-debug/core`. pnpm rewrites this to a concrete version on publish
+- Duplicate detection now preserves non-sensitive query parameters, so requests
+  that differ only by a non-sensitive query parameter are no longer reported as
+  duplicates
+
 ## [0.1.0] - 2026-09-27
 
 ### Added

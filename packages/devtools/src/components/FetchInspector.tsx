@@ -1,10 +1,10 @@
-"use client";
-
 /**
  * Fetch inspector component.
+ *
+ * No `"use client"` directive: it renders from a single serializable `event`.
  */
 
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import type { DebugEvent } from "@next-rsc-debug/core";
 
 export interface FetchInspectorProps {
@@ -16,7 +16,14 @@ interface InspectorRow {
   value: string;
 }
 
-export function FetchInspector({ event }: FetchInspectorProps) {
+/**
+ * Memoized: the inspector renders from a single `event`, which only changes
+ * when the selection changes. Without `memo` it re-rendered on every streamed
+ * SSE event because the parent re-renders on each flush.
+ */
+export const FetchInspector = memo(function FetchInspector({
+  event,
+}: FetchInspectorProps) {
   const metadata = (event?.metadata ?? {}) as Record<string, unknown>;
 
   const rows = useMemo((): InspectorRow[] => {
@@ -82,4 +89,4 @@ export function FetchInspector({ event }: FetchInspectorProps) {
       )}
     </div>
   );
-}
+});

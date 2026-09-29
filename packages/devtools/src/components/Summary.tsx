@@ -1,33 +1,46 @@
-"use client";
-
 /**
  * Summary cards for the DevTools dashboard.
+ *
+ * No `"use client"` directive: this component only reads serializable props
+ * and uses `useMemo` as a render-time optimization, so it can be rendered by a
+ * Server Component. `DevTools` (a client module) imports it just fine.
  */
 
 import { useMemo } from "react";
-import type { DebugEvent } from "@next-rsc-debug/core";
+import type { DebugEvent, Warning } from "@next-rsc-debug/core";
 import { analyzeEvents } from "@next-rsc-debug/core";
 
 export interface SummaryProps {
   events: DebugEvent[];
   threshold: number;
+  /**
+   * Pre-computed warnings from `analyzeEvents`. Supply this when several
+   * panels share one analysis so the (O(n), URL-normalizing) pass is not
+   * repeated. When omitted the component computes its own.
+   */
+  warnings?: Warning[];
 }
 
-export function Summary({ events, threshold }: SummaryProps) {
-  const { warnings } = useMemo(
-    () => analyzeEvents(events, { slowThreshold: threshold }),
-    [events, threshold],
+export function Summary({ events, threshold, warnings }: SummaryProps) {
+  const resolvedWarnings = useMemo(
+    () =>
+      warnings ?? analyzeEvents(events, { slowThreshold: threshold }).warnings,
+    [warnings, events, threshold],
   );
 
   const stats = useMemo(() => {
     const fetches = events.filter(
       (e) => e.type === "fetch:start" || e.type === "fetch:end",
     ).length;
-    const slow = warnings.filter((w) => w.type === "slow-request").length;
-    const dupes = warnings.filter((w) => w.type === "duplicate-request").length;
+    const slow = resolvedWarnings.filter(
+      (w) => w.type === "slow-request",
+    ).length;
+    const dupes = resolvedWarnings.filter(
+      (w) => w.type === "duplicate-request",
+    ).length;
     const errors = events.filter((e) => e.type === "error").length;
     return { total: events.length, fetches, slow, dupes, errors };
-  }, [events, warnings]);
+  }, [events, resolvedWarnings]);
 
   const cards = [
     { label: "Events", value: stats.total, color: "#60a5fa" },

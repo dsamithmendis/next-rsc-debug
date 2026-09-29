@@ -10,6 +10,12 @@ export default tseslint.config(
       "**/out/**",
       "**/node_modules/**",
       "**/coverage/**",
+      // Local tooling state. `.kilo/worktrees/` contains a full second
+      // checkout of this repository (an agent worktree), so linting it walks a
+      // duplicate of code that is already linted at its real path — and it
+      // reported warnings for CI scripts that are exempt there. Matches
+      // .prettierignore and .gitignore.
+      ".kilo/**",
     ],
   },
   js.configs.recommended,

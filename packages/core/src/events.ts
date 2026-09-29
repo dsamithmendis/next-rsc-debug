@@ -5,6 +5,8 @@
  * Optional fields: duration, requestId, parentId, metadata.
  */
 
+import { sanitizeMetadata } from "./sanitize.js";
+
 export type DebugEventType =
   | "navigation:start"
   | "navigation:end"
@@ -80,8 +82,12 @@ export function createEvent(options: CreateEventOptions): DebugEvent {
   if (options.duration !== undefined) {
     event.duration = options.duration;
   }
-  if (options.metadata !== undefined) {
-    event.metadata = options.metadata;
+  // Sanitized here, at the single point every event is constructed, so that
+  // sensitive keys and unserializable values cannot reach the collector — and
+  // from there the SSE stream — no matter which producer supplied them.
+  const metadata = sanitizeMetadata(options.metadata);
+  if (metadata !== undefined) {
+    event.metadata = metadata;
   }
   return event;
 }

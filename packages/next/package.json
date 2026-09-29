@@ -1,6 +1,6 @@
 {
   "name": "next-rsc-debug",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Observability and debugging toolkit for Next.js App Router applications",
   "author": "Samith Mendis",
   "license": "MIT",
@@ -27,10 +27,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run --config vitest.config.ts"
+    "test": "vitest run --config vitest.config.ts",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@next-rsc-debug/core": "0.1.9"
+    "@next-rsc-debug/core": "workspace:*"
   },
   "publishConfig": {
     "access": "public",

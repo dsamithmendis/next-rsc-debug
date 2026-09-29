@@ -187,6 +187,15 @@
   background: #1a1f29;
 }
 
+.nrpd-timeline-truncated {
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  background: #1a1f29;
+  color: #6e7681;
+  font-size: 11px;
+}
+
 .nrpd-timeline-item.selected {
   background: #1e3a5f;
 }
@@ -256,6 +265,65 @@
 
 .nrpd-warning-message {
   flex: 1;
+}
+
+/* Panel fault isolation: shown in place of a panel that threw. */
+.nrpd-panel-error {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid #7f1d1d;
+  border-radius: 6px;
+  background: #2d1416;
+  color: #f87171;
+  font-size: 12px;
+}
+
+.nrpd-panel-error-message {
+  color: #fca5a5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  word-break: break-word;
+}
+
+/* Shown in place of a panel that suspended. */
+.nrpd-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.nrpd-skeleton-bar {
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #1a1f29 25%, #232b36 50%, #1a1f29 75%);
+  background-size: 200% 100%;
+  animation: nrpd-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.nrpd-skeleton-bar:nth-child(2) {
+  width: 85%;
+}
+
+.nrpd-skeleton-bar:nth-child(3) {
+  width: 65%;
+}
+
+@keyframes nrpd-skeleton-pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nrpd-skeleton-bar {
+    animation: none;
+  }
 }
 
 @media (max-width: 768px) {

@@ -10,6 +10,7 @@ import {
   createRequestId,
   createNavigationId,
   getCollector,
+  sanitizeKey,
   type DebugEvent,
   type DebugEventType,
 } from "@next-rsc-debug/core";
@@ -100,7 +101,10 @@ export function debugCacheHit(
   api.collector.push(
     createEvent({
       type: "cache:hit",
-      metadata: { key, ...metadata, observed: true },
+      // Cache keys routinely embed the thing being cached — `user:alice@…` —
+      // and they are broadcast to every connected browser, so redact the
+      // identifying parts before the event is stored.
+      metadata: { key: sanitizeKey(key), ...metadata, observed: true },
     }),
   );
 }
@@ -113,7 +117,7 @@ export function debugCacheMiss(
   api.collector.push(
     createEvent({
       type: "cache:miss",
-      metadata: { key, ...metadata, observed: true },
+      metadata: { key: sanitizeKey(key), ...metadata, observed: true },
     }),
   );
 }
@@ -126,7 +130,7 @@ export function debugCacheInvalidate(
   api.collector.push(
     createEvent({
       type: "cache:invalidate",
-      metadata: { key, ...metadata, observed: true },
+      metadata: { key: sanitizeKey(key), ...metadata, observed: true },
     }),
   );
 }

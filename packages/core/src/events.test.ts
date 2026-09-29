@@ -52,3 +52,44 @@ describe("events", () => {
     expect(id.startsWith("custom_")).toBe(true);
   });
 });
+
+describe("createEvent metadata sanitization", () => {
+  it("strips sensitive keys before the event reaches the collector", () => {
+    const event = createEvent({
+      type: "cache:hit",
+      metadata: { key: "user:1", password: "hunter2" },
+    });
+    expect(event.metadata).toEqual({ key: "user:1" });
+  });
+
+  it("makes metadata safe to JSON.stringify", () => {
+    const circular: Record<string, unknown> = { url: "/a" };
+    circular.self = circular;
+    const event = createEvent({
+      type: "cache:hit",
+      metadata: { big: 1n, circular },
+    });
+    expect(() => JSON.stringify(event)).not.toThrow();
+  });
+
+  it("normalizes rich values for display", () => {
+    const event = createEvent({
+      type: "cache:hit",
+      metadata: { at: new Date(0), tags: new Set(["a"]) },
+    });
+    expect(event.metadata).toEqual({
+      at: "1970-01-01T00:00:00.000Z",
+      tags: ["a"],
+    });
+  });
+
+  it("does not mutate the caller's object", () => {
+    const metadata = { url: "/a", token: "secret" };
+    createEvent({ type: "cache:hit", metadata });
+    expect(metadata.token).toBe("secret");
+  });
+
+  it("omits metadata entirely when none is supplied", () => {
+    expect(createEvent({ type: "error" }).metadata).toBeUndefined();
+  });
+});

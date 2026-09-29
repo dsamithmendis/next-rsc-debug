@@ -100,6 +100,51 @@ describe("useSse", () => {
     await waitFor(() => expect(result.current.events).toHaveLength(2));
   });
 
+  it("preserves every event in a burst, in arrival order", async () => {
+    const { result } = renderHook(() => useSse("/api/debug-events"));
+
+    // Emitted across separate tasks so each one lands in its own frame window,
+    // which is where buffering is supposed to collapse the commits.
+    await act(async () => {
+      FakeEventSource.last().emit(
+        "event",
+        createEvent({ type: "fetch:start" }),
+      );
+    });
+    await act(async () => {
+      FakeEventSource.last().emit("event", createEvent({ type: "fetch:end" }));
+    });
+    await act(async () => {
+      FakeEventSource.last().emit("event", createEvent({ type: "error" }));
+    });
+
+    await waitFor(() => expect(result.current.events).toHaveLength(3));
+    expect(result.current.events.map((e) => e.type)).toEqual([
+      "fetch:start",
+      "fetch:end",
+      "error",
+    ]);
+  });
+
+  it("drops buffered events when a snapshot supersedes them", async () => {
+    const { result } = renderHook(() => useSse("/api/debug-events"));
+
+    await act(async () => {
+      // Queue an event without letting the frame flush yet.
+      FakeEventSource.last().emit(
+        "event",
+        createEvent({ type: "fetch:start" }),
+      );
+      // The snapshot is authoritative and must win over the pending event.
+      FakeEventSource.last().emit("snapshot", {
+        events: [createEvent({ type: "rsc:start" })],
+      });
+    });
+
+    await waitFor(() => expect(result.current.events).toHaveLength(1));
+    expect(result.current.events[0].type).toBe("rsc:start");
+  });
+
   it("ignores malformed payloads instead of throwing", async () => {
     const { result } = renderHook(() => useSse("/api/debug-events"));
 
@@ -134,5 +179,41 @@ describe("useSse", () => {
     const es = FakeEventSource.last();
     unmount();
     expect(es.closed).toBe(true);
+  });
+
+  it("evicts the oldest events once maxEvents is exceeded", async () => {
+    const { result } = renderHook(() =>
+      useSse("/api/debug-events", { maxEvents: 3 }),
+    );
+
+    await act(async () => {
+      const es = FakeEventSource.last();
+      for (let i = 0; i < 6; i += 1) {
+        es.emit("event", createEvent({ type: `fetch:end`, metadata: { i } }));
+      }
+    });
+
+    await waitFor(() => expect(result.current.events).toHaveLength(3));
+    // The three most recent survive; the oldest three were dropped.
+    expect(result.current.events.map((e) => e.metadata?.i)).toEqual([3, 4, 5]);
+  });
+
+  it("truncates an oversized snapshot", async () => {
+    const { result } = renderHook(() =>
+      useSse("/api/debug-events", { maxEvents: 2 }),
+    );
+
+    await act(async () => {
+      FakeEventSource.last().emit("snapshot", {
+        events: [
+          createEvent({ type: "fetch:start", metadata: { i: 0 } }),
+          createEvent({ type: "fetch:start", metadata: { i: 1 } }),
+          createEvent({ type: "fetch:start", metadata: { i: 2 } }),
+        ],
+      });
+    });
+
+    await waitFor(() => expect(result.current.events).toHaveLength(2));
+    expect(result.current.events.map((e) => e.metadata?.i)).toEqual([1, 2]);
   });
 });
