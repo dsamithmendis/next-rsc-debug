@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-09-29
+
 ### Fixed
 
 - `pnpm lint` crashed on startup after Dependabot bumped TypeScript to 7.0.2.
