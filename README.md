@@ -12,6 +12,10 @@ Next.js App Router applications. It helps you understand the relationship
 between browser navigation, RSC requests, server-side fetches, caching, Server
 Components, Server Actions, RSC payloads, errors, and client rendering.
 
+**Keywords:** nextjs · react · rsc · react-server-components · app-router ·
+server-components · server-actions · devtools · debugging · observability ·
+tracing · instrumentation · fetch · cache · sse · typescript
+
 > **Core principle:** Don't merely show events. Explain what happened and why.
 
 > **No browser extension.** The dashboard is an ordinary page inside your own
