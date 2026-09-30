@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-09-30
+
+### Changed
+
+- `next-rsc-debug` and `@next-rsc-debug/devtools` now depend on
+  `@next-rsc-debug/core@0.2.2` as a concrete published version instead of the
+  `workspace:*` protocol, so the published tarballs install cleanly outside the
+  monorepo
+
+### Verification
+
+- Confirmed `0.2.1` is resolvable from the public registry (the earlier
+  `ETARGET` errors were registry propagation lag, not a failed publish) and
+  released `0.2.2` from the same commit
+
 ## [0.2.1] - 2026-09-29
 
 ### Fixed

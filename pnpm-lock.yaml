@@ -766,6 +766,11 @@ packages:
     os: [linux]
     libc: [glibc]
 
+  '@next-rsc-debug/core@0.2.1':
+    resolution: {integrity: sha512-QB9D5A8bS9gCMCp5eMpBP3z8b7OAmPADcO/2SXSA+f8OfmyPR7PY7LbKhQ8RvkYAYQxwmp3MUXGSQJUJc0+vWQ==}
+    peerDependencies:
+      typescript: '>=5.0.0 <6.1.0'
+
   '@next/env@16.3.6':
     resolution: {integrity: sha512-x9Vblze1EbtltQYnNH38xCPWU3TVfBd1eXqA3+w9+BTpedkkdNpAaltXlGQ/nsc1+E0mVTNrtcbX3GoO09zeLQ==}
 
@@ -2781,6 +2786,10 @@ snapshots:
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
+
+  '@next-rsc-debug/core@0.2.1(typescript@6.0.3)':
+    dependencies:
+      typescript: 6.0.3
 
   '@next/env@16.3.6': {}
 
